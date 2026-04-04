@@ -1,11 +1,48 @@
-import './index.css'
+import { useState } from "react";
+import { useStorage } from "./hooks/useStorage";
+import { ALL_MODULES } from "./data/constants";
+import ClassList from "./components/ClassList";
+import "./index.css";
 
-function App() {
+export default function App() {
+  const [currentModule, setCurrentModule] = useState(null);
+  const [settings] = useStorage("sy_settings", {
+    theme: "turuncu",
+    className: "3-B",
+    moduleOrder: ALL_MODULES.map((m) => m.id),
+  });
+
+  // Tema uygula
+  document.body.setAttribute("data-theme", settings.theme);
+
+  function goHome() {
+    setCurrentModule(null);
+  }
+
+  if (currentModule === "list") return <ClassList onBack={goHome} />;
+
   return (
-    <div>
-      <h1>Sınıf Yöneticisi</h1>
-    </div>
-  )
-}
+    <div className="home-bg">
+      <div className="home-clock">
+        <div className="time">⚡</div>
+        <div className="date">Sınıf Yöneticisi</div>
+        <div style={{ fontSize: 12, fontWeight: 800, color: "var(--accent-soft)", marginTop: 4 }}>
+          {settings.className}
+        </div>
+      </div>
 
-export default App
+      <div className="home-grid">
+        {ALL_MODULES.map((m) => (
+          <button
+            key={m.id}
+            className="app-icon"
+            onClick={() => setCurrentModule(m.id)}
+          >
+            <div className="ic" style={{ background: m.grad }}>{m.emoji}</div>
+            <div className="il">{m.label}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
