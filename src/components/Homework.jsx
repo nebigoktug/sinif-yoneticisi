@@ -8,9 +8,31 @@ export default function Homework({ onBack }) {
   const todayKey = getTodayKey();
   const todayData = homeworkHistory[todayKey] || {};
 
+  const [settings] = useStorage("sy_settings", {});
+  const [history, setHistory] = useStorage("sy_history", {});
+
   function toggle(name) {
     const newToday = { ...todayData, [name]: !todayData[name] };
     setHomeworkHistory({ ...homeworkHistory, [todayKey]: newToday });
+
+    if (settings.homeworkAutoBehavior) {
+      const todayRec = history[todayKey] || {};
+      const rec = todayRec[name] || { behaviors: [], note: "" };
+      const hasPenalty = rec.behaviors.includes("Ödev Eksik");
+      const getirdi = !todayData[name];
+      let behaviors;
+      if (getirdi && hasPenalty) {
+        behaviors = rec.behaviors.filter((b) => b !== "Ödev Eksik");
+      } else if (!getirdi && !hasPenalty) {
+        behaviors = [...rec.behaviors, "Ödev Eksik"];
+      } else {
+        return;
+      }
+      setHistory({
+        ...history,
+        [todayKey]: { ...todayRec, [name]: { ...rec, behaviors } },
+      });
+    }
   }
 
   const missing = students.filter((s) => !todayData[s.name]);

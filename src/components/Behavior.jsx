@@ -6,6 +6,8 @@ import { BEHAVIORS } from "../data/constants";
 export default function Behavior({ onBack }) {
   const [students] = useStorage("sy_students", migrateLegacy(localStorage.getItem("sy_students")));
   const [history, setHistory] = useStorage("sy_history", {});
+  const [pointsHistory, setPointsHistory] = useStorage("sy_points", {});
+  const [settings] = useStorage("sy_settings", {});
   const [expanded, setExpanded] = useState(null);
 
   const todayKey = getTodayKey();
@@ -17,7 +19,8 @@ export default function Behavior({ onBack }) {
 
   function toggleBehavior(name, behaviorLabel) {
     const rec = getRecord(name);
-    const behaviors = rec.behaviors.includes(behaviorLabel)
+    const wasOn = rec.behaviors.includes(behaviorLabel);
+    const behaviors = wasOn
       ? rec.behaviors.filter((b) => b !== behaviorLabel)
       : [...rec.behaviors, behaviorLabel];
     const newHistory = {
@@ -25,6 +28,15 @@ export default function Behavior({ onBack }) {
       [todayKey]: { ...todayRecords, [name]: { ...rec, behaviors } },
     };
     setHistory(newHistory);
+
+    if (settings.behaviorAutoPenalty) {
+      const dayData = pointsHistory[todayKey] || {};
+      const entries = dayData[name] || [];
+      if (!wasOn) {
+        const newEntries = [...entries, { label: "Otomatik Ceza", pts: -1, time: new Date().toISOString() }];
+        setPointsHistory({ ...pointsHistory, [todayKey]: { ...dayData, [name]: newEntries } });
+      }
+    }
   }
 
   function setNote(name, note) {

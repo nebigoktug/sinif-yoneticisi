@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useStorage } from "./hooks/useStorage";
 import { ALL_MODULES } from "./data/constants";
 import ClassList from "./components/ClassList";
@@ -16,46 +16,64 @@ import "./index.css";
 
 export default function App() {
   const [currentModule, setCurrentModule] = useState(null);
+  const [time, setTime] = useState("");
+  const [date, setDate] = useState("");
   const [settings] = useStorage("sy_settings", {
     theme: "turuncu",
     className: "3-B",
     moduleOrder: ALL_MODULES.map((m) => m.id),
   });
 
-  // Tema uygula
-  document.body.setAttribute("data-theme", settings.theme);
+  useEffect(() => {
+    document.body.setAttribute("data-theme", settings.theme);
+  }, [settings.theme]);
 
-  function goHome() {
-    setCurrentModule(null);
-  }
-if (currentModule === "picker") return <Picker onBack={goHome} />;
-if (currentModule === "msg") return <ParentMessage onBack={goHome} />;
-if (currentModule === "contacts") return <Contacts onBack={goHome} />;
-if (currentModule === "calendar") return <Calendar onBack={goHome} />;
-if (currentModule === "week") return <WeeklySummary onBack={goHome} />;
-if (currentModule === "seat") return <Seat onBack={goHome} />;
-if (currentModule === "settings") return <Settings onBack={goHome} />;
+  useEffect(() => {
+    function tick() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, "0");
+      const m = String(now.getMinutes()).padStart(2, "0");
+      setTime(`${h}:${m}`);
+      const days = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+      const months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+      setDate(`${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`);
+    }
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  function goHome() { setCurrentModule(null); }
+
+const orderedModules = (settings.moduleOrder || ALL_MODULES.map((m) => m.id))
+  .map((id) => ALL_MODULES.find((m) => m.id === id))
+  .filter((m) => m && !(settings.hiddenModules || []).includes(m.id));
+
   if (currentModule === "list") return <ClassList onBack={goHome} />;
   if (currentModule === "behavior") return <Behavior onBack={goHome} />;
   if (currentModule === "points") return <Points onBack={goHome} />;
   if (currentModule === "homework") return <Homework onBack={goHome} />;
+  if (currentModule === "picker") return <Picker onBack={goHome} />;
+  if (currentModule === "msg") return <ParentMessage onBack={goHome} />;
+  if (currentModule === "contacts") return <Contacts onBack={goHome} />;
+  if (currentModule === "calendar") return <Calendar onBack={goHome} />;
+  if (currentModule === "week") return <WeeklySummary onBack={goHome} />;
+  if (currentModule === "settings") return <Settings onBack={goHome} />;
+  if (currentModule === "seat") return <Seat onBack={goHome} />;
+
   return (
     <div className="home-bg">
       <div className="home-clock">
-        <div className="time">⚡</div>
-        <div className="date">Sınıf Yöneticisi</div>
+        <div className="time">{time}</div>
+        <div className="date">{date}</div>
         <div style={{ fontSize: 12, fontWeight: 800, color: "var(--accent-soft)", marginTop: 4 }}>
-          {settings.className}
+          ⚡ {settings.className}
         </div>
       </div>
 
       <div className="home-grid">
-        {ALL_MODULES.map((m) => (
-          <button
-            key={m.id}
-            className="app-icon"
-            onClick={() => setCurrentModule(m.id)}
-          >
+        {orderedModules.map((m) => (
+          <button key={m.id} className="app-icon" onClick={() => setCurrentModule(m.id)}>
             <div className="ic" style={{ background: m.grad }}>{m.emoji}</div>
             <div className="il">{m.label}</div>
           </button>
