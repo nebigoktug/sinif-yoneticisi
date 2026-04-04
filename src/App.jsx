@@ -44,7 +44,17 @@ export default function App() {
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, []);
-
+useEffect(() => {
+  const allIds = ALL_MODULES.map((m) => m.id);
+  const currentOrder = settings.moduleOrder || [];
+  const missing = allIds.filter((id) => !currentOrder.includes(id));
+  if (missing.length > 0) {
+    const newOrder = [...currentOrder.filter((id) => allIds.includes(id)), ...missing];
+    // settings'i güncelle ama sonsuz döngüye girme
+    const updated = { ...settings, moduleOrder: newOrder };
+    localStorage.setItem("sy_settings", JSON.stringify(updated));
+  }
+}, []);
   function goHome() { setCurrentModule(null); }
 
 const orderedModules = (settings.moduleOrder || ALL_MODULES.map((m) => m.id))
