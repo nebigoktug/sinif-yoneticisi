@@ -12,6 +12,8 @@ import Calendar from "./components/Calendar";
 import WeeklySummary from "./components/WeeklySummary";
 import Settings from "./components/Settings";
 import Seat from "./components/Seat";
+import HomeWidgets from "./components/HomeWidgets";
+import Schedule from "./components/Schedule";
 import "./index.css";
 
 export default function App() {
@@ -60,6 +62,7 @@ const orderedModules = (settings.moduleOrder || ALL_MODULES.map((m) => m.id))
   if (currentModule === "week") return <WeeklySummary onBack={goHome} />;
   if (currentModule === "settings") return <Settings onBack={goHome} />;
   if (currentModule === "seat") return <Seat onBack={goHome} />;
+  if (currentModule === "schedule") return <Schedule onBack={goHome} />;
 
   return (
     <div className="home-bg">
@@ -75,7 +78,7 @@ const orderedModules = (settings.moduleOrder || ALL_MODULES.map((m) => m.id))
           )}
         </div>
       </div>
-
+      
       <div className="home-grid">
         {orderedModules.map((m) => (
           <button key={m.id} className="app-icon" onClick={() => setCurrentModule(m.id)}>
@@ -86,7 +89,7 @@ const orderedModules = (settings.moduleOrder || ALL_MODULES.map((m) => m.id))
           </button>
         ))}
       </div>
-
+        <HomeWidgets onNavigate={setCurrentModule} />
       <div style={{ textAlign: "center", marginTop: 20, fontSize: 10, color: "var(--text4)" }}>
         ⚡ Sınıf Yöneticisi
         {settings.schoolName && (
