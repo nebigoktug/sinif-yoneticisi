@@ -64,20 +64,34 @@ const orderedModules = (settings.moduleOrder || ALL_MODULES.map((m) => m.id))
   return (
     <div className="home-bg">
       <div className="home-clock">
-        <div className="time">{time}</div>
+        <div className="time" style={{ fontVariantNumeric: "tabular-nums" }}>{time}</div>
         <div className="date">{date}</div>
         <div style={{ fontSize: 12, fontWeight: 800, color: "var(--accent-soft)", marginTop: 4 }}>
           ⚡ {settings.className}
+          {settings.teacherName && (
+            <span style={{ color: "var(--text3)", fontWeight: 600, marginLeft: 8 }}>
+              {settings.teacherName}
+            </span>
+          )}
         </div>
       </div>
 
       <div className="home-grid">
         {orderedModules.map((m) => (
           <button key={m.id} className="app-icon" onClick={() => setCurrentModule(m.id)}>
-            <div className="ic" style={{ background: m.grad }}>{m.emoji}</div>
-            <div className="il">{m.label}</div>
+            <div className="ic" style={{ background: m.grad, boxShadow: `0 4px 20px ${m.grad.match(/#[0-9a-f]{6}/i)?.[0]}22` }}>
+              {m.emoji}
+            </div>
+            <div className="il" style={{ whiteSpace: "pre-line" }}>{m.label}</div>
           </button>
         ))}
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: 20, fontSize: 10, color: "var(--text4)" }}>
+        ⚡ Sınıf Yöneticisi
+        {settings.schoolName && (
+          <span style={{ marginLeft: 6 }}>· {settings.schoolName}</span>
+        )}
       </div>
     </div>
   );

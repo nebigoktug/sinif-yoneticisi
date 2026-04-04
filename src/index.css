@@ -75,3 +75,48 @@ input::placeholder{color:var(--text3)}
 .theme-dots{display:flex;gap:4px}
 .theme-dots span{width:16px;height:16px;border-radius:50%;border:2px solid #00000033}
 </style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.module-view.active {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.home-bg {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.app-icon:active .ic {
+  transform: scale(0.88);
+  transition: transform 0.1s;
+}
+
+.ic {
+  transition: transform 0.15s;
+}
+.mh {
+  background: var(--card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.bb:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent-soft);
+}
+
+.card {
+  transition: border-color 0.15s;
+}
+
+.card:hover {
+  border-color: var(--card-hover);
+}
+
+.chip:active, .bs:active, .bp:active {
+  opacity: 0.75;
+  transform: scale(0.97);
+}
