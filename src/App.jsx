@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useStorage } from "./hooks/useStorage";
 import { ALL_MODULES } from "./data/constants";
 import ClassList from "./components/ClassList";
+import Behavior from "./components/Behavior";
+import Points from "./components/Points";
+import Homework from "./components/Homework";
 import "./index.css";
 
 export default function App() {
@@ -20,7 +23,9 @@ export default function App() {
   }
 
   if (currentModule === "list") return <ClassList onBack={goHome} />;
-
+  if (currentModule === "behavior") return <Behavior onBack={goHome} />;
+  if (currentModule === "points") return <Points onBack={goHome} />;
+  if (currentModule === "homework") return <Homework onBack={goHome} />;
   return (
     <div className="home-bg">
       <div className="home-clock">
