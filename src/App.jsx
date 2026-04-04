@@ -8,6 +8,10 @@ import Homework from "./components/Homework";
 import Picker from "./components/Picker";
 import ParentMessage from "./components/ParentMessage";
 import Contacts from "./components/Contacts";
+import Calendar from "./components/Calendar";
+import WeeklySummary from "./components/WeeklySummary";
+import Settings from "./components/Settings";
+import Seat from "./components/Seat";
 import "./index.css";
 
 export default function App() {
@@ -27,6 +31,10 @@ export default function App() {
 if (currentModule === "picker") return <Picker onBack={goHome} />;
 if (currentModule === "msg") return <ParentMessage onBack={goHome} />;
 if (currentModule === "contacts") return <Contacts onBack={goHome} />;
+if (currentModule === "calendar") return <Calendar onBack={goHome} />;
+if (currentModule === "week") return <WeeklySummary onBack={goHome} />;
+if (currentModule === "seat") return <Seat onBack={goHome} />;
+if (currentModule === "settings") return <Settings onBack={goHome} />;
   if (currentModule === "list") return <ClassList onBack={goHome} />;
   if (currentModule === "behavior") return <Behavior onBack={goHome} />;
   if (currentModule === "points") return <Points onBack={goHome} />;
