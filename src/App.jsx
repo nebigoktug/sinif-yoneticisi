@@ -5,6 +5,9 @@ import ClassList from "./components/ClassList";
 import Behavior from "./components/Behavior";
 import Points from "./components/Points";
 import Homework from "./components/Homework";
+import Picker from "./components/Picker";
+import ParentMessage from "./components/ParentMessage";
+import Contacts from "./components/Contacts";
 import "./index.css";
 
 export default function App() {
@@ -21,7 +24,9 @@ export default function App() {
   function goHome() {
     setCurrentModule(null);
   }
-
+if (currentModule === "picker") return <Picker onBack={goHome} />;
+if (currentModule === "msg") return <ParentMessage onBack={goHome} />;
+if (currentModule === "contacts") return <Contacts onBack={goHome} />;
   if (currentModule === "list") return <ClassList onBack={goHome} />;
   if (currentModule === "behavior") return <Behavior onBack={goHome} />;
   if (currentModule === "points") return <Points onBack={goHome} />;
