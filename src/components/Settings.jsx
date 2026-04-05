@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { THEMES, ALL_MODULES } from "../data/constants";
 
-export default function Settings({ onBack }) {
+export default function Settings({ onBack, onOpenGuide }) {
   const [settings, setSettings] = useStorage("sy_settings", {
     theme: "turuncu",
     className: "3-B",
@@ -22,11 +22,11 @@ export default function Settings({ onBack }) {
     setSettings(updated);
   }
 
-function toggleHidden(id) {
-  if (id === "settings") return;
-  const hidden = settings.hiddenModules || [];
-  update("hiddenModules", hidden.includes(id) ? hidden.filter((x) => x !== id) : [...hidden, id]);
-}
+  function toggleHidden(id) {
+    if (id === "settings") return;
+    const hidden = settings.hiddenModules || [];
+    update("hiddenModules", hidden.includes(id) ? hidden.filter((x) => x !== id) : [...hidden, id]);
+  }
 
   function moveModule(id, dir) {
     const order = [...(settings.moduleOrder || ALL_MODULES.map((m) => m.id))];
@@ -121,9 +121,40 @@ function toggleHidden(id) {
               onChange={(e) => update("teacherName", e.target.value)} />
 
             <div style={{ fontWeight: 800, marginBottom: 8 }}>Okul Adı</div>
-            <input className="ti" style={{ width: "100%", marginBottom: 14 }}
+            <input className="ti" style={{ width: "100%", marginBottom: 24 }}
               value={settings.schoolName || ""} placeholder="Okul adı"
               onChange={(e) => update("schoolName", e.target.value)} />
+
+            {/* ─── Kılavuz ─── */}
+            <div style={{
+              background: "var(--card)",
+              border: "1px solid var(--card-border)",
+              borderRadius: 16,
+              padding: "14px",
+            }}>
+              <div style={{ fontWeight: 800, fontSize: 13, marginBottom: 4, color: "var(--text2)" }}>
+                📖 Kullanım Kılavuzu
+              </div>
+              <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 12 }}>
+                Uygulamayı nasıl kullanacağını öğrenmek için kılavuzu aç.
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button
+                  className="bp"
+                  style={{ background: "var(--accent)", flex: 1, padding: "10px" }}
+                  onClick={() => onOpenGuide("quick")}
+                >
+                  🗺️ Hızlı Tur
+                </button>
+                <button
+                  className="bp"
+                  style={{ background: "var(--surface)", color: "var(--text)", border: "1px solid var(--card-border)", flex: 1, padding: "10px" }}
+                  onClick={() => onOpenGuide("detailed")}
+                >
+                  📖 Detaylı
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
@@ -167,11 +198,11 @@ function toggleHidden(id) {
                   <button className="bs" style={{ background: "var(--surface)", color: "var(--text2)" }}
                     onClick={() => moveModule(id, 1)} disabled={i === arr.length - 1}>↓</button>
                   {id !== "settings" && (
-                  <button className="bs" style={{ background: hidden ? "var(--accent)" : "var(--surface)", color: hidden ? "#fff" : "var(--text2)" }}
-                    onClick={() => toggleHidden(id)}>
-                    {hidden ? "👁️" : "🚫"}
-                  </button>
-                )}
+                    <button className="bs" style={{ background: hidden ? "var(--accent)" : "var(--surface)", color: hidden ? "#fff" : "var(--text2)" }}
+                      onClick={() => toggleHidden(id)}>
+                      {hidden ? "👁️" : "🚫"}
+                    </button>
+                  )}
                 </div>
               );
             })}
