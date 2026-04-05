@@ -2,6 +2,26 @@ import { useStorage } from "../hooks/useStorage";
 import { migrateLegacy, formatDate } from "../utils/helpers";
 import { BEHAVIORS } from "../data/constants";
 
+function getTotalBehaviorCount(behaviors) {
+  if (!behaviors || behaviors.length === 0) return 0;
+  if (typeof behaviors[0] === "string") return behaviors.length;
+  return behaviors.reduce((sum, b) => sum + (b.count || 0), 0);
+}
+
+function getBehaviorCountByLabel(behaviors, label) {
+  if (!behaviors || behaviors.length === 0) return 0;
+  if (typeof behaviors[0] === "string") return behaviors.filter((b) => b === label).length;
+  return behaviors.find((b) => b.label === label)?.count || 0;
+}
+
+// Yeni format: { [subject]: bool } — eski: true/false
+function getMissingHomeworkCount(rec) {
+  if (rec === null || rec === undefined) return 0;
+  if (typeof rec === "boolean") return rec ? 0 : 1;
+  if (typeof rec === "object") return Object.values(rec).filter((v) => v === false).length;
+  return 0;
+}
+
 export default function WeeklySummary({ onBack }) {
   const [students] = useStorage("sy_students", migrateLegacy(localStorage.getItem("sy_students")));
   const [history] = useStorage("sy_history", {});
@@ -15,7 +35,7 @@ export default function WeeklySummary({ onBack }) {
   }).reverse();
 
   function getBehaviorCount(name) {
-    return last7.reduce((sum, key) => sum + (history[key]?.[name]?.behaviors?.length || 0), 0);
+    return last7.reduce((sum, key) => sum + getTotalBehaviorCount(history[key]?.[name]?.behaviors), 0);
   }
 
   function getPoints(name) {
@@ -23,15 +43,22 @@ export default function WeeklySummary({ onBack }) {
   }
 
   function getMissingHomework(name) {
-    return last7.filter((key) => homeworkHistory[key]?.[name] === false).length;
+    return last7.reduce((sum, key) => {
+      const rec = homeworkHistory[key]?.[name];
+      return sum + getMissingHomeworkCount(rec);
+    }, 0);
   }
 
   function getMostCommonBehavior(name) {
     const counts = {};
     last7.forEach((key) => {
-      (history[key]?.[name]?.behaviors || []).forEach((b) => {
-        counts[b] = (counts[b] || 0) + 1;
-      });
+      const behaviors = history[key]?.[name]?.behaviors || [];
+      if (behaviors.length === 0) return;
+      if (typeof behaviors[0] === "string") {
+        behaviors.forEach((b) => { counts[b] = (counts[b] || 0) + 1; });
+      } else {
+        behaviors.forEach((b) => { counts[b.label] = (counts[b.label] || 0) + b.count; });
+      }
     });
     const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
     return sorted[0] ? `${sorted[0][0]} (${sorted[0][1]}x)` : null;
@@ -51,10 +78,13 @@ export default function WeeklySummary({ onBack }) {
 
   const totalBehaviors = studentStats.reduce((s, x) => s + x.beh, 0);
   const totalMissing = studentStats.reduce((s, x) => s + x.hw, 0);
+
   const behaviorCounts = {};
   BEHAVIORS.forEach((b) => {
     behaviorCounts[b.label] = last7.reduce((sum, key) => {
-      return sum + students.filter((s) => history[key]?.[s.name]?.behaviors?.includes(b.label)).length;
+      return sum + students.reduce((s2, st) => {
+        return s2 + getBehaviorCountByLabel(history[key]?.[st.name]?.behaviors, b.label);
+      }, 0);
     }, 0);
   });
   const topBehaviorType = Object.entries(behaviorCounts).sort((a, b) => b[1] - a[1])[0];
@@ -70,7 +100,6 @@ export default function WeeklySummary({ onBack }) {
           {formatDate(last7[0])} — {formatDate(last7[6])}
         </div>
 
-        {/* Genel istatistikler */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 16 }}>
           <div className="card" style={{ textAlign: "center" }}>
             <div style={{ fontSize: 28, fontWeight: 900, color: "var(--red)" }}>{totalBehaviors}</div>
@@ -89,7 +118,6 @@ export default function WeeklySummary({ onBack }) {
           )}
         </div>
 
-        {/* En çok uyarı alan */}
         {topBehavior.some((s) => s.beh > 0) && (
           <div className="card" style={{ marginBottom: 8 }}>
             <div style={{ fontWeight: 800, marginBottom: 10, color: "var(--red)" }}>🔴 En Çok Uyarı</div>
@@ -105,7 +133,6 @@ export default function WeeklySummary({ onBack }) {
           </div>
         )}
 
-        {/* En yüksek puanlı */}
         {topPoints.some((s) => s.pts > 0) && (
           <div className="card" style={{ marginBottom: 8 }}>
             <div style={{ fontWeight: 800, marginBottom: 10, color: "var(--yellow)" }}>⭐ En Yüksek Puan</div>
@@ -118,7 +145,6 @@ export default function WeeklySummary({ onBack }) {
           </div>
         )}
 
-        {/* En çok ödev eksik */}
         {topMissing.length > 0 && (
           <div className="card" style={{ marginBottom: 16 }}>
             <div style={{ fontWeight: 800, marginBottom: 10, color: "var(--blue)" }}>📝 Ödev Takip</div>
@@ -131,7 +157,6 @@ export default function WeeklySummary({ onBack }) {
           </div>
         )}
 
-        {/* Tüm öğrenciler */}
         <div style={{ fontWeight: 800, marginBottom: 8, color: "var(--text2)" }}>Tüm Öğrenciler</div>
         {studentStats.map((s) => (
           <div key={s.id} className="card">

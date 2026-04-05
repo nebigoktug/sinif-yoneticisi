@@ -44,68 +44,141 @@ export default function App() {
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, []);
-useEffect(() => {
-  const allIds = ALL_MODULES.map((m) => m.id);
-  const currentOrder = settings.moduleOrder || [];
-  const missing = allIds.filter((id) => !currentOrder.includes(id));
-  if (missing.length > 0) {
-    const newOrder = [...currentOrder.filter((id) => allIds.includes(id)), ...missing];
-    // settings'i güncelle ama sonsuz döngüye girme
-    const updated = { ...settings, moduleOrder: newOrder };
-    localStorage.setItem("sy_settings", JSON.stringify(updated));
-  }
-}, []);
+
+  useEffect(() => {
+    const allIds = ALL_MODULES.map((m) => m.id);
+    const currentOrder = settings.moduleOrder || [];
+    const missing = allIds.filter((id) => !currentOrder.includes(id));
+    if (missing.length > 0) {
+      const newOrder = [...currentOrder.filter((id) => allIds.includes(id)), ...missing];
+      const updated = { ...settings, moduleOrder: newOrder };
+      localStorage.setItem("sy_settings", JSON.stringify(updated));
+    }
+  }, []);
+
   function goHome() { setCurrentModule(null); }
 
-const orderedModules = (settings.moduleOrder || ALL_MODULES.map((m) => m.id))
-  .map((id) => ALL_MODULES.find((m) => m.id === id))
-  .filter((m) => m && !(settings.hiddenModules || []).includes(m.id));
+  const orderedModules = (settings.moduleOrder || ALL_MODULES.map((m) => m.id))
+    .map((id) => ALL_MODULES.find((m) => m.id === id))
+    .filter((m) => m && !(settings.hiddenModules || []).includes(m.id));
 
-  if (currentModule === "list") return <ClassList onBack={goHome} />;
+  if (currentModule === "list")     return <ClassList onBack={goHome} />;
   if (currentModule === "behavior") return <Behavior onBack={goHome} />;
-  if (currentModule === "points") return <Points onBack={goHome} />;
+  if (currentModule === "points")   return <Points onBack={goHome} />;
   if (currentModule === "homework") return <Homework onBack={goHome} />;
-  if (currentModule === "picker") return <Picker onBack={goHome} />;
-  if (currentModule === "msg") return <ParentMessage onBack={goHome} />;
+  if (currentModule === "picker")   return <Picker onBack={goHome} />;
+  if (currentModule === "msg")      return <ParentMessage onBack={goHome} />;
   if (currentModule === "contacts") return <Contacts onBack={goHome} />;
   if (currentModule === "calendar") return <Calendar onBack={goHome} />;
-  if (currentModule === "week") return <WeeklySummary onBack={goHome} />;
+  if (currentModule === "week")     return <WeeklySummary onBack={goHome} />;
   if (currentModule === "settings") return <Settings onBack={goHome} />;
-  if (currentModule === "seat") return <Seat onBack={goHome} />;
+  if (currentModule === "seat")     return <Seat onBack={goHome} />;
   if (currentModule === "schedule") return <Schedule onBack={goHome} />;
 
   return (
     <div className="home-bg">
+
+      {/* ─── Saat & Tarih ─── */}
       <div className="home-clock">
-        <div className="time" style={{ fontVariantNumeric: "tabular-nums" }}>{time}</div>
-        <div className="date">{date}</div>
-        <div style={{ fontSize: 12, fontWeight: 800, color: "var(--accent-soft)", marginTop: 4 }}>
-          ⚡ {settings.className}
+        {/* Arka plan halo */}
+        <div style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -60%)",
+          width: 200,
+          height: 200,
+          borderRadius: "50%",
+          background: "radial-gradient(circle, var(--accent-bg) 0%, transparent 70%)",
+          pointerEvents: "none",
+          filter: "blur(20px)",
+          opacity: 0.8,
+        }} />
+
+        <div className="time" style={{ fontVariantNumeric: "tabular-nums", position: "relative" }}>
+          {time}
+        </div>
+        <div className="date" style={{ position: "relative" }}>{date}</div>
+
+        {/* Sınıf & Öğretmen badge */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 8, position: "relative" }}>
+          <div style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 5,
+            background: "var(--accent-bg)",
+            border: "1px solid var(--accent-border)",
+            borderRadius: 20,
+            padding: "4px 12px",
+            fontSize: 12,
+            fontWeight: 800,
+            color: "var(--accent-soft)",
+          }}>
+            ⚡ {settings.className}
+          </div>
           {settings.teacherName && (
-            <span style={{ color: "var(--text3)", fontWeight: 600, marginLeft: 8 }}>
+            <div style={{
+              display: "inline-flex",
+              alignItems: "center",
+              background: "var(--glass)",
+              border: "1px solid var(--glass-border)",
+              borderRadius: 20,
+              padding: "4px 12px",
+              fontSize: 11,
+              fontWeight: 600,
+              color: "var(--text3)",
+            }}>
               {settings.teacherName}
-            </span>
+            </div>
           )}
         </div>
       </div>
-      
+
+      {/* ─── Modül Grid ─── */}
       <div className="home-grid">
         {orderedModules.map((m) => (
-          <button key={m.id} className="app-icon" onClick={() => setCurrentModule(m.id)}>
-            <div className="ic" style={{ background: m.grad, boxShadow: `0 4px 20px ${m.grad.match(/#[0-9a-f]{6}/i)?.[0]}22` }}>
+          <button
+            key={m.id}
+            className="app-icon"
+            onClick={() => setCurrentModule(m.id)}
+          >
+            <div
+              className="ic"
+              style={{
+                background: m.grad,
+                boxShadow: `0 4px 20px ${m.grad.match(/#[0-9a-f]{6}/i)?.[0]}44`,
+              }}
+            >
               {m.emoji}
             </div>
             <div className="il" style={{ whiteSpace: "pre-line" }}>{m.label}</div>
           </button>
         ))}
       </div>
-        <HomeWidgets onNavigate={setCurrentModule} />
-      <div style={{ textAlign: "center", marginTop: 20, fontSize: 10, color: "var(--text4)" }}>
-        ⚡ Sınıf Yöneticisi
+
+      {/* ─── Widgets ─── */}
+      <HomeWidgets onNavigate={setCurrentModule} />
+
+      {/* ─── Footer ─── */}
+      <div style={{
+        textAlign: "center",
+        marginTop: 16,
+        fontSize: 10,
+        color: "var(--text4)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 6,
+      }}>
+        <span>⚡ Sınıf Yöneticisi</span>
         {settings.schoolName && (
-          <span style={{ marginLeft: 6 }}>· {settings.schoolName}</span>
+          <>
+            <span style={{ color: "var(--text4)" }}>·</span>
+            <span>{settings.schoolName}</span>
+          </>
         )}
       </div>
+
     </div>
   );
 }

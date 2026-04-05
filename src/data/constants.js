@@ -35,33 +35,33 @@ export const LAYOUT_PRESETS = [
 
 export const THEMES = [
   { id: "turuncu", label: "🟠 Turuncu", dots: ["#ea580c", "#dc2626", "#fb923c"] },
-  { id: "mavi", label: "🔵 Mavi", dots: ["#3b82f6", "#2563eb", "#60a5fa"] },
-  { id: "yesil", label: "🟢 Yeşil", dots: ["#10b981", "#059669", "#34d399"] },
-  { id: "mor", label: "🟣 Mor", dots: ["#8b5cf6", "#7c3aed", "#a78bfa"] },
-  { id: "pembe", label: "🩷 Pembe", dots: ["#ec4899", "#db2777", "#f472b6"] },
+  { id: "mavi",    label: "🔵 Mavi",    dots: ["#3b82f6", "#2563eb", "#60a5fa"] },
+  { id: "yesil",   label: "🟢 Yeşil",   dots: ["#10b981", "#059669", "#34d399"] },
+  { id: "mor",     label: "🟣 Mor",     dots: ["#8b5cf6", "#7c3aed", "#a78bfa"] },
+  { id: "pembe",   label: "🩷 Pembe",   dots: ["#ec4899", "#db2777", "#f472b6"] },
+  { id: "acik",    label: "☀️ Açık",    dots: ["#ea580c", "#fed7aa", "#fff7ed"] },
 ];
 
 export const EVENT_TYPES = [
-  { id: "sinav", label: "📝 Sınav", color: "#ef4444" },
-  { id: "proje", label: "📂 Proje", color: "#3b82f6" },
+  { id: "sinav",    label: "📝 Sınav",           color: "#ef4444" },
+  { id: "proje",    label: "📂 Proje",            color: "#3b82f6" },
   { id: "toplanti", label: "🤝 Veli Toplantısı", color: "#eab308" },
-  { id: "etkinlik", label: "🎉 Etkinlik", color: "#10b981" },
-  { id: "not", label: "📌 Not", color: "#a78bfa" },
-  { id: "tatil", label: "🏖️ Tatil", color: "#06b6d4" },
+  { id: "etkinlik", label: "🎉 Etkinlik",         color: "#10b981" },
+  { id: "not",      label: "📌 Not",              color: "#a78bfa" },
+  { id: "tatil",    label: "🏖️ Tatil",           color: "#06b6d4" },
 ];
 
 export const ALL_MODULES = [
-  { id: "behavior", emoji: "📋", label: "Yaramazlık\nTakibi", grad: "linear-gradient(135deg,#ea580c,#dc2626)" },
-  { id: "points", emoji: "⭐", label: "Puan &\nÖdül", grad: "linear-gradient(135deg,#eab308,#f97316)" },
-  { id: "homework", emoji: "📝", label: "Ödev\nTakibi", grad: "linear-gradient(135deg,#3b82f6,#6366f1)" },
-  { id: "picker", emoji: "🎲", label: "Rastgele\nSeçim", grad: "linear-gradient(135deg,#10b981,#14b8a6)" },
-  { id: "seat", emoji: "🪑", label: "Oturma\nDüzeni", grad: "linear-gradient(135deg,#8b5cf6,#a855f7)" },
-  { id: "msg", emoji: "📨", label: "Veli\nMesajı", grad: "linear-gradient(135deg,#06b6d4,#0ea5e9)" },
-  { id: "calendar", emoji: "📅", label: "Takvim", grad: "linear-gradient(135deg,#f59e0b,#d97706)" },
-  { id: "week", emoji: "📈", label: "Haftalık\nÖzet", grad: "linear-gradient(135deg,#f43f5e,#e11d48)" },
-  { id: "contacts", emoji: "📱", label: "Veli\nİletişim", grad: "linear-gradient(135deg,#ec4899,#db2777)" },
-  { id: "list", emoji: "👥", label: "Sınıf\nListesi", grad: "linear-gradient(135deg,#78716c,#a8a29e)" },
-  { id: "schedule", emoji: "📚", label: "Ders\nProgramı", grad: "linear-gradient(135deg,#0891b2,#0e7490)" },
-  { id: "settings", emoji: "⚙️", label: "Ayarlar", grad: "linear-gradient(135deg,#52525b,#71717a)" },
-
+  { id: "behavior", emoji: "📋", label: "Yaramazlık\nTakibi",  grad: "linear-gradient(135deg,#ea580c,#dc2626)" },
+  { id: "points",   emoji: "⭐", label: "Puan &\nÖdül",        grad: "linear-gradient(135deg,#eab308,#f97316)" },
+  { id: "homework", emoji: "📝", label: "Ödev\nTakibi",        grad: "linear-gradient(135deg,#3b82f6,#6366f1)" },
+  { id: "picker",   emoji: "🎲", label: "Rastgele\nSeçim",     grad: "linear-gradient(135deg,#10b981,#14b8a6)" },
+  { id: "seat",     emoji: "🪑", label: "Oturma\nDüzeni",      grad: "linear-gradient(135deg,#8b5cf6,#a855f7)" },
+  { id: "msg",      emoji: "📨", label: "Veli\nMesajı",        grad: "linear-gradient(135deg,#06b6d4,#0ea5e9)" },
+  { id: "calendar", emoji: "📅", label: "Takvim",              grad: "linear-gradient(135deg,#f59e0b,#d97706)" },
+  { id: "week",     emoji: "📈", label: "Haftalık\nÖzet",      grad: "linear-gradient(135deg,#f43f5e,#e11d48)" },
+  { id: "contacts", emoji: "📱", label: "Veli\nİletişim",      grad: "linear-gradient(135deg,#ec4899,#db2777)" },
+  { id: "list",     emoji: "👥", label: "Sınıf\nListesi",      grad: "linear-gradient(135deg,#78716c,#a8a29e)" },
+  { id: "schedule", emoji: "📚", label: "Ders\nProgramı",      grad: "linear-gradient(135deg,#0891b2,#0e7490)" },
+  { id: "settings", emoji: "⚙️", label: "Ayarlar",             grad: "linear-gradient(135deg,#52525b,#71717a)" },
 ];
