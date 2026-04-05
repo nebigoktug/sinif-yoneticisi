@@ -80,6 +80,7 @@ export default function Settings({ onBack, onOpenGuide }) {
     { id: "moduller", label: "Modüller" },
     { id: "otomasyon", label: "Otomasyon" },
     { id: "veri", label: "Veri" },
+    { id: "yasal", label: "Yasal" },
   ];
 
   return (
@@ -251,6 +252,48 @@ export default function Settings({ onBack, onOpenGuide }) {
             <button className="bp" style={{ background: "var(--accent2)", marginTop: 20 }} onClick={resetAll}>
               🗑️ Tüm Verileri Sıfırla
             </button>
+          </div>
+        )}
+
+        {/* Yasal */}
+        {activeTab === "yasal" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div style={{ fontSize: 12, color: "var(--text3)", marginBottom: 4 }}>
+              Uygulamayı kullanarak aşağıdaki belgeleri kabul etmiş sayılırsınız.
+            </div>
+
+            {[
+              { emoji: "🔒", label: "Gizlilik Politikası", href: "/gizlilik" },
+              { emoji: "📋", label: "KVKK Aydınlatma Metni", href: "/kvkk" },
+              { emoji: "📄", label: "Kullanım Koşulları", href: "/kosullar" },
+            ].map(({ emoji, label, href }) => (
+              <a
+                key={href}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="card"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  textDecoration: "none",
+                  color: "var(--text)",
+                  fontWeight: 700,
+                  fontSize: 14,
+                }}
+              >
+                <span style={{ fontSize: 22 }}>{emoji}</span>
+                <span style={{ flex: 1 }}>{label}</span>
+                <span style={{ color: "var(--text3)", fontSize: 16 }}>›</span>
+              </a>
+            ))}
+
+            <div className="card" style={{ marginTop: 8, fontSize: 11, color: "var(--text3)", lineHeight: 1.8 }}>
+              <div style={{ fontWeight: 700, marginBottom: 2 }}>⚡ Sınıf Yöneticisi</div>
+              <div>© 2026 Nebi Göktuğ Çalışkan</div>
+              <div>v1.0 · sinifyoneticisi.com.tr</div>
+            </div>
           </div>
         )}
 
