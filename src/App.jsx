@@ -66,12 +66,40 @@ export default function App() {
     }
   }, []);
 
+  // ─── PWA Geri Tuşu ───
+  // Uygulama ilk açıldığında base state'i push et
+  useEffect(() => {
+    history.replaceState({ module: null }, "");
+  }, []);
+
+  // Modül açılınca history stack'e ekle
+  function openModule(id) {
+    setCurrentModule(id);
+    history.pushState({ module: id }, "");
+  }
+
+  // Android geri tuşu / tarayıcı geri → modülü kapat
+  useEffect(() => {
+    function handlePop(e) {
+      const mod = e.state?.module ?? null;
+      setCurrentModule(mod);
+      // Ana ekrana döndüysek onboarding'i kapatmaya gerek yok,
+      // ama açıksa kalsın
+    }
+    window.addEventListener("popstate", handlePop);
+    return () => window.removeEventListener("popstate", handlePop);
+  }, []);
+
   function closeOnboarding() {
     localStorage.setItem("sy_onboarding_done", "1");
     setOnboardingMode(null);
   }
 
-  function goHome() { setCurrentModule(null); }
+  // Modül içindeki ← butonu → history.back() ile geri git
+  // Bu sayede popstate tetiklenir ve state tutarlı kalır
+  function goHome() {
+    history.back();
+  }
 
   const orderedModules = (settings.moduleOrder || ALL_MODULES.map((m) => m.id))
     .map((id) => ALL_MODULES.find((m) => m.id === id))
@@ -136,7 +164,7 @@ export default function App() {
       {/* ─── Modül Grid ─── */}
       <div className="home-grid">
         {orderedModules.map((m) => (
-          <button key={m.id} className="app-icon" onClick={() => setCurrentModule(m.id)}>
+          <button key={m.id} className="app-icon" onClick={() => openModule(m.id)}>
             <div className="ic" style={{
               background: m.grad,
               boxShadow: `0 4px 20px ${m.grad.match(/#[0-9a-f]{6}/i)?.[0]}44`,
@@ -149,7 +177,7 @@ export default function App() {
       </div>
 
       {/* ─── Widgets ─── */}
-      <HomeWidgets onNavigate={setCurrentModule} />
+      <HomeWidgets onNavigate={openModule} />
 
       {/* ─── Footer ─── */}
       <div style={{
