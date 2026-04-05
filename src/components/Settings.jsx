@@ -263,9 +263,9 @@ export default function Settings({ onBack, onOpenGuide }) {
             </div>
 
             {[
-              { emoji: "🔒", label: "Gizlilik Politikası", href: "/gizlilik-politikasi" },
-              { emoji: "📋", label: "KVKK Aydınlatma Metni", href: "/kvkk-aydinlatma" },
-              { emoji: "📄", label: "Kullanım Koşulları", href: "/kullanim-kosullari" },
+              { emoji: "🔒", label: "Gizlilik Politikası", href: "/gizlilik-politikasi.html" },
+              { emoji: "📋", label: "KVKK Aydınlatma Metni", href: "/kvkk-aydinlatma.html" },
+              { emoji: "📄", label: "Kullanım Koşulları", href: "/kullanim-kosullari.html" },
             ].map(({ emoji, label, href }) => (
               <a
                 key={href}
