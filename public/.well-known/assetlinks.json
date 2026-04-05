@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "tr.com.sinifyoneticisi.www.twa",
+      "sha256_cert_fingerprints": [
+        "64:08:A2:97:3A:8B:A2:C5:0B:59:47:60:CE:6E:E1:02:7F:52:22:B6:A8:C2:B1:87:9B:E3:4B:2C:F1:51:84:FB"
+      ]
+    }
+  }
+]
