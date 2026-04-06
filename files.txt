@@ -34,7 +34,7 @@ src/components/Schedule.jsx | 115 satır
 src/components/Seat.jsx | 345 satır
 src/components/Settings.jsx | 302 satır
 src/components/WeeklySummary.jsx | 174 satır
-src/data/constants.js | 66 satır
+src/data/constants.js | 67 satır
 src/hooks/useStorage.js | 29 satır
 src/utils/helpers.js | 28 satır
 src/styles/Notes.css | 399 satır

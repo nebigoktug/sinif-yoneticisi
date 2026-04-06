@@ -61,6 +61,7 @@ export const ALL_MODULES = [
   { id: "calendar", emoji: "📅", label: "Takvim",              grad: "linear-gradient(135deg,#f59e0b,#d97706)" },
   { id: "week",     emoji: "📈", label: "Haftalık\nÖzet",      grad: "linear-gradient(135deg,#f43f5e,#e11d48)" },
   { id: "contacts", emoji: "📱", label: "Veli\nİletişim",      grad: "linear-gradient(135deg,#ec4899,#db2777)" },
+  { id: "notes",    emoji: "📓", label: "Notlarım",             grad: "linear-gradient(135deg,#fb923c,#fbbf24)" },
   { id: "list",     emoji: "👥", label: "Sınıf\nListesi",      grad: "linear-gradient(135deg,#78716c,#a8a29e)" },
   { id: "schedule", emoji: "📚", label: "Ders\nProgramı",      grad: "linear-gradient(135deg,#0891b2,#0e7490)" },
   { id: "settings", emoji: "⚙️", label: "Ayarlar",             grad: "linear-gradient(135deg,#52525b,#71717a)" },
