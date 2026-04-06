@@ -23,7 +23,7 @@ src/components/Behavior.jsx | 272 satır
 src/components/Calendar.jsx | 111 satır
 src/components/ClassList.jsx | 178 satır
 src/components/Contacts.jsx | 81 satır
-src/components/HomeWidgets.jsx | 180 satır
+src/components/HomeWidgets.jsx | 229 satır
 src/components/Homework.jsx | 259 satır
 src/components/Notes.jsx | 273 satır
 src/components/Onboarding.jsx | 353 satır

@@ -24,12 +24,14 @@ export default function HomeWidgets({ onNavigate }) {
   const [history] = useStorage("sy_history", {});
   const [pointsHistory] = useStorage("sy_points", {});
   const [calendarEvents] = useStorage("sy_calendar", {});
+  const [notes] = useStorage("sy_notes", {});
 
   const todayKey = getTodayKey();
   const subjectsKey = `_subjects_${todayKey}`;
   const todayHomework = homeworkHistory[todayKey] || {};
   const todaySubjects = homeworkHistory[subjectsKey] || [];
   const todayBehavior = history[todayKey] || {};
+  const todayNotes = notes[todayKey] || [];
 
   // Eksik: herhangi bir dersi getirmemiş öğrenci sayısı
   const missingCount = students.filter((s) => getMissingSubjectCount(todayHomework[s.name]) > 0).length;
@@ -140,6 +142,53 @@ export default function HomeWidgets({ onNavigate }) {
           }}>
             {topPoints} puan
           </div>
+        </button>
+      )}
+
+      {todayNotes.length > 0 && (
+        <button
+          onClick={() => onNavigate("notes")}
+          style={{
+            width: "100%",
+            background: "linear-gradient(135deg,rgba(168,85,247,0.10),rgba(168,85,247,0.04))",
+            border: "1px solid rgba(168,85,247,0.2)",
+            borderRadius: 16, padding: "12px 16px", cursor: "pointer", marginBottom: 8,
+            backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
+            transition: "all 0.2s", textAlign: "left",
+          }}
+        >
+          <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", letterSpacing: "0.5px", marginBottom: 8 }}>
+            📌 BUGÜNÜN NOTLARI
+          </div>
+          {todayNotes.slice(0, 2).map((note, i) => (
+            <div key={i} style={{
+              display: "flex", alignItems: "flex-start", gap: 8,
+              marginBottom: i < Math.min(todayNotes.length, 2) - 1 ? 6 : 0,
+            }}>
+              <div style={{
+                fontSize: 12, fontWeight: 600, color: "var(--text)",
+                flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"
+              }}>
+                {note.text}
+              </div>
+              {note.category && (
+                <div style={{
+                  fontSize: 9, fontWeight: 700,
+                  color: "var(--text3)",
+                  background: "var(--surface2)",
+                  padding: "2px 6px", borderRadius: 4,
+                  textTransform: "uppercase",
+                }}>
+                  {note.category}
+                </div>
+              )}
+            </div>
+          ))}
+          {todayNotes.length > 2 && (
+            <div style={{ fontSize: 10, color: "var(--text3)", fontWeight: 600, marginTop: 6 }}>
+              +{todayNotes.length - 2} not daha
+            </div>
+          )}
         </button>
       )}
 
