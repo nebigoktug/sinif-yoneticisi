@@ -14,6 +14,7 @@ import Settings from "./components/Settings";
 import Seat from "./components/Seat";
 import HomeWidgets from "./components/HomeWidgets";
 import Schedule from "./components/Schedule";
+import Notes from "./components/Notes";
 import Onboarding from "./components/Onboarding";
 import "./index.css";
 
@@ -117,6 +118,7 @@ export default function App() {
   if (currentModule === "settings") return <Settings onBack={goHome} onOpenGuide={(mode) => { goHome(); setTimeout(() => setOnboardingMode(mode), 100); }} />;
   if (currentModule === "seat")     return <Seat onBack={goHome} />;
   if (currentModule === "schedule") return <Schedule onBack={goHome} />;
+  if (currentModule === "notes")    return <Notes onBack={goHome} />;
 
   return (
     <div className="home-bg">

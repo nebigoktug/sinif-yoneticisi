@@ -4,7 +4,7 @@
 .npmrc | -1 satır
 README.md | 16 satır
 eslint.config.js | 29 satır
-files.txt | 37 satır
+files.txt | 40 satır
 index.html | 29 satır
 package-lock.json | 2658 satır
 package.json | 27 satır
@@ -16,7 +16,7 @@ public/manifest.json | 29 satır
 public/sw.js | 54 satır
 public/.well-known/assetlinks.json | 12 satır
 src/App.css | 0 satır
-src/App.jsx | 194 satır
+src/App.jsx | 197 satır
 src/index.css | 741 satır
 src/main.jsx | 10 satır
 src/components/Behavior.jsx | 272 satır
