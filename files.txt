@@ -25,6 +25,7 @@ src/components/ClassList.jsx | 178 satır
 src/components/Contacts.jsx | 81 satır
 src/components/HomeWidgets.jsx | 229 satır
 src/components/Homework.jsx | 259 satır
+src/components/MatematikMateryal.jsx | 313 satır
 src/components/Notes.jsx | 273 satır
 src/components/Onboarding.jsx | 353 satır
 src/components/ParentMessage.jsx | 550 satır
@@ -34,7 +35,7 @@ src/components/Schedule.jsx | 115 satır
 src/components/Seat.jsx | 345 satır
 src/components/Settings.jsx | 302 satır
 src/components/WeeklySummary.jsx | 174 satır
-src/data/constants.js | 67 satır
+src/data/constants.js | 68 satır
 src/hooks/useStorage.js | 29 satır
 src/utils/helpers.js | 28 satır
 src/styles/Notes.css | 399 satır
