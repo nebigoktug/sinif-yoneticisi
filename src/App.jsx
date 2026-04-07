@@ -16,6 +16,7 @@ import HomeWidgets from "./components/HomeWidgets";
 import Schedule from "./components/Schedule";
 import Notes from "./components/Notes";
 import Onboarding from "./components/Onboarding";
+import MatematikMateryal from "./components/MatematikMateryal";
 import "./index.css";
 
 export default function App() {
@@ -119,6 +120,7 @@ export default function App() {
   if (currentModule === "seat")     return <Seat onBack={goHome} />;
   if (currentModule === "schedule") return <Schedule onBack={goHome} />;
   if (currentModule === "notes")    return <Notes onBack={goHome} />;
+  if (currentModule === "matematik") return <MatematikMateryal onBack={goHome} />;
 
   return (
     <div className="home-bg">

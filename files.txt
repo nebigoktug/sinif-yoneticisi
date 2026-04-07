@@ -16,7 +16,7 @@ public/manifest.json | 29 satır
 public/sw.js | 54 satır
 public/.well-known/assetlinks.json | 12 satır
 src/App.css | 0 satır
-src/App.jsx | 197 satır
+src/App.jsx | 199 satır
 src/index.css | 741 satır
 src/main.jsx | 10 satır
 src/components/Behavior.jsx | 272 satır
