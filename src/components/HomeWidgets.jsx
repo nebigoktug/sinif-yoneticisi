@@ -111,6 +111,45 @@ export default function HomeWidgets({ onNavigate }) {
         </button>
       </div>
 
+      {/* Matematik Materyalleri Kartı */}
+      <button
+        onClick={() => onNavigate("matematik")}
+        style={{
+          width: "100%",
+          background: "linear-gradient(135deg,rgba(99,102,241,0.12),rgba(139,92,246,0.08))",
+          border: "1px solid rgba(99,102,241,0.25)",
+          borderRadius: 16, padding: "16px", cursor: "pointer", marginBottom: 8,
+          backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
+          display: "flex", alignItems: "center", gap: 12, transition: "all 0.2s",
+        }}
+      >
+        <div style={{
+          width: 52, height: 52, borderRadius: 14,
+          background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 28, flexShrink: 0,
+          boxShadow: "0 4px 12px rgba(99,102,241,0.3)",
+        }}>
+          🔢
+        </div>
+        <div style={{ flex: 1, textAlign: "left" }}>
+          <div style={{ fontSize: 10, color: "var(--text3)", fontWeight: 700, letterSpacing: "0.5px", marginBottom: 4 }}>
+            EĞİTİM ARAÇLARI
+          </div>
+          <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 2 }}>
+            Matematik Materyalleri
+          </div>
+          <div style={{ fontSize: 11, color: "var(--text3)", fontWeight: 600 }}>
+            Sayı doğrusu, geometri, kesirler ve daha fazlası
+          </div>
+        </div>
+        <div style={{
+          fontSize: 20, color: "rgba(99,102,241,0.6)", fontWeight: 900
+        }}>
+          →
+        </div>
+      </button>
+
       {topStudent && topPoints > 0 && (
         <button
           onClick={() => onNavigate("points")}

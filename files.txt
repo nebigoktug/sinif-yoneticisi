@@ -4,7 +4,7 @@
 .npmrc | -1 satır
 README.md | 16 satır
 eslint.config.js | 29 satır
-files.txt | 40 satır
+files.txt | 41 satır
 index.html | 29 satır
 package-lock.json | 2658 satır
 package.json | 27 satır
@@ -23,7 +23,7 @@ src/components/Behavior.jsx | 272 satır
 src/components/Calendar.jsx | 111 satır
 src/components/ClassList.jsx | 178 satır
 src/components/Contacts.jsx | 81 satır
-src/components/HomeWidgets.jsx | 229 satır
+src/components/HomeWidgets.jsx | 268 satır
 src/components/Homework.jsx | 259 satır
 src/components/MatematikMateryal.jsx | 313 satır
 src/components/Notes.jsx | 273 satır
