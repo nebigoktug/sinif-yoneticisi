@@ -9,12 +9,12 @@ function SayiDogrusuSVG() {
   const [animasyonBasladi, setAnimasyonBasladi] = useState(false);
   const [animasyonBitti, setAnimasyonBitti] = useState(false);
 
-  // SVG boyutları
+  // SVG viewBox boyutları (sabit, responsive olacak)
   const genislik = 1200;
-  const yukseklik = 400;
+  const yukseklik = 500; // Yüksekliği artırdık (sayılar için alan)
   const solMarjin = 80;
   const sagMarjin = 80;
-  const cizgiY = yukseklik / 2;
+  const cizgiY = yukseklik / 2.5; // Yukarı kaydırdık
   const cizgiBaslangic = solMarjin;
   const cizgiBitis = genislik - sagMarjin;
   const cizgiUzunluk = cizgiBitis - cizgiBaslangic;
@@ -116,8 +116,8 @@ function SayiDogrusuSVG() {
           x={ortaX}
           y={kontrolY - 15}
           textAnchor="middle"
-          className="text-3xl font-black fill-white"
-          style={{ filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.5))' }}
+          className="text-3xl font-black fill-gray-800"
+          style={{ filter: 'drop-shadow(1px 1px 3px rgba(255,255,255,0.8))' }}
         >
           {index + 1}
         </text>
@@ -232,11 +232,17 @@ function SayiDogrusuSVG() {
       </div>
 
       {/* SVG Sayı Doğrusu */}
-      <div className="bg-white rounded-3xl shadow-2xl p-8">
+      <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-3xl shadow-2xl p-8">
         <h3 className="text-4xl font-black mb-8 text-gray-800 text-center">📏 Sayı Doğrusu</h3>
         
-        <div className="w-full overflow-x-auto">
-          <svg width={genislik} height={yukseklik} className="mx-auto">
+        {/* Responsive SVG container */}
+        <div className="w-full">
+          <svg 
+            viewBox={`0 0 ${genislik} ${yukseklik}`} 
+            preserveAspectRatio="xMidYMid meet"
+            className="w-full h-auto"
+            style={{ maxHeight: '500px' }}
+          >
             {/* Ana çizgi */}
             <defs>
               <marker
@@ -276,9 +282,9 @@ function SayiDogrusuSVG() {
             {/* Sayı işaretleri */}
             {Array.from({ length: maxSayi + 1 }, (_, i) => i).map((num) => {
               const x = sayiPozisyonu(num);
-              const cizgiUzunlugu = num % 5 === 0 ? 25 : 15;
-              const yaziBoyutu = num % 5 === 0 ? 'text-3xl' : 'text-2xl';
-              const yaziKalinlik = num % 5 === 0 ? 'font-black' : 'font-bold';
+              const cizgiUzunlugu = num % 5 === 0 ? 30 : 20;
+              const yaziBoyutu = num % 5 === 0 ? 'text-4xl' : 'text-3xl';
+              const yaziKalinlik = 'font-black';
               
               return (
                 <g key={num}>
@@ -289,15 +295,19 @@ function SayiDogrusuSVG() {
                     x2={x}
                     y2={cizgiY + cizgiUzunlugu}
                     stroke="#4B5563"
-                    strokeWidth="3"
+                    strokeWidth="4"
                     strokeLinecap="round"
                   />
-                  {/* Sayı */}
+                  {/* Sayı - TÜM SAYILAR BÜYÜK VE NET */}
                   <text
                     x={x}
-                    y={cizgiY + cizgiUzunlugu + 35}
+                    y={cizgiY + cizgiUzunlugu + 50}
                     textAnchor="middle"
-                    className={`${yaziBoyutu} ${yaziKalinlik} fill-gray-700`}
+                    className={`${yaziBoyutu} ${yaziKalinlik} fill-gray-800`}
+                    style={{ 
+                      fontFamily: 'system-ui, -apple-system, sans-serif',
+                      letterSpacing: '0.05em'
+                    }}
                   >
                     {num}
                   </text>
@@ -320,6 +330,7 @@ function SayiDogrusuSVG() {
                   y={cizgiY - 35}
                   textAnchor="middle"
                   className="text-4xl font-black fill-blue-600"
+                  style={{ filter: 'drop-shadow(1px 1px 2px rgba(255,255,255,0.9))' }}
                 >
                   🔵 {s1}
                 </text>
@@ -371,6 +382,7 @@ function SayiDogrusuSVG() {
                   y={cizgiY - 50}
                   textAnchor="middle"
                   className="text-5xl font-black fill-green-600"
+                  style={{ filter: 'drop-shadow(1px 1px 2px rgba(255,255,255,0.9))' }}
                 >
                   🎯 SONUÇ!
                 </text>
