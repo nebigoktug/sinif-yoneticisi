@@ -83,25 +83,16 @@ function SayiDogrusuSVG() {
   const s2 = sayi2 ? parseInt(sayi2) : null;
   const sonuc = s1 !== null && s2 !== null ? (islem === 'toplama' ? s1 + s2 : s1 - s2) : null;
 
-  // Yay ok çizme fonksiyonu
-  const yayOkCiz = (baslangic, bitis, renk, index) => {
+  // Yay çizme fonksiyonu (OK İŞARETİ YOK)
+  const yayCiz = (baslangic, bitis, renk, index) => {
     const x1 = sayiPozisyonu(baslangic);
     const x2 = sayiPozisyonu(bitis);
     const kontrolY = cizgiY - 60; // Yayın yüksekliği
     const ortaX = (x1 + x2) / 2;
     
-    // Ok ucu koordinatları
-    const okUcuBoyut = 18; // Daha büyük ok ucu
-    const yon = x2 > x1 ? 1 : -1;
-    
-    // Ok ucu için yay eğrisi üzerindeki açı hesaplaması
-    // Basitleştirilmiş: yatay ok ucu
-    const okX = x2;
-    const okY = cizgiY;
-    
     return (
       <g key={index}>
-        {/* Yay çizgisi */}
+        {/* Yay çizgisi - OK YOK */}
         <path
           d={`M ${x1} ${cizgiY} Q ${ortaX} ${kontrolY} ${x2} ${cizgiY}`}
           fill="none"
@@ -109,15 +100,6 @@ function SayiDogrusuSVG() {
           strokeWidth="8"
           strokeLinecap="round"
           className="animate-pulse"
-        />
-        {/* Belirgin ok başı - üçgen */}
-        <polygon
-          points={`${okX},${okY} ${okX - yon * okUcuBoyut},${okY - okUcuBoyut} ${okX - yon * okUcuBoyut},${okY + okUcuBoyut}`}
-          fill={renk}
-          stroke={renk}
-          strokeWidth="3"
-          className="animate-pulse"
-          style={{ filter: 'drop-shadow(0 0 4px rgba(0,0,0,0.4))' }}
         />
         {/* Adım numarası - SİYAH */}
         <text
@@ -174,7 +156,7 @@ function SayiDogrusuSVG() {
         <div className="w-full grid grid-cols-2 gap-6 mb-8">
           <div className="w-full">
             <label className="block text-3xl font-black mb-4" style={{ color: '#000' }}>
-              🔵 {islem === 'toplama' ? 'Başlangıç Sayısı' : 'Büyük Sayı'}
+              🟡 {islem === 'toplama' ? 'Başlangıç Sayısı' : 'Büyük Sayı'}
             </label>
             <input
               type="number"
@@ -185,7 +167,7 @@ function SayiDogrusuSVG() {
                 setAnimasyonBitti(false);
                 setAnimasyonAdim(0);
               }}
-              className="w-full p-8 text-5xl font-black text-center border-6 border-blue-400 rounded-3xl focus:border-blue-600 focus:outline-none bg-blue-50 shadow-lg"
+              className="w-full p-8 text-5xl font-black text-center border-6 border-yellow-400 rounded-3xl focus:border-yellow-600 focus:outline-none bg-yellow-50 shadow-lg"
               style={{ color: '#000' }}
               placeholder="?"
               min={0}
@@ -334,14 +316,14 @@ function SayiDogrusuSVG() {
               );
             })}
 
-            {/* Başlangıç noktası işareti (mavi) */}
+            {/* Başlangıç noktası işareti (sarı) - SARI YAYLARLA ÇİZİLİYOR */}
             {s1 !== null && (
               <g>
                 <circle
                   cx={sayiPozisyonu(s1)}
                   cy={cizgiY}
                   r="20"
-                  fill="#3B82F6"
+                  fill="#F59E0B"
                   className="animate-pulse"
                 />
                 {/* Aşağı bakan ok ve "Başlangıç" etiketi */}
@@ -349,7 +331,7 @@ function SayiDogrusuSVG() {
                   {/* Aşağı bakan ok */}
                   <polygon
                     points={`${sayiPozisyonu(s1)},${cizgiY - 35} ${sayiPozisyonu(s1) - 12},${cizgiY - 50} ${sayiPozisyonu(s1) + 12},${cizgiY - 50}`}
-                    fill="#3B82F6"
+                    fill="#F59E0B"
                     stroke="#000"
                     strokeWidth="2"
                   />
@@ -368,16 +350,25 @@ function SayiDogrusuSVG() {
               </g>
             )}
 
-            {/* Animasyonlu yay oklar */}
+            {/* Başlangıç sayısını sarı yaylar ile çiz (0'dan başlayarak) */}
+            {s1 !== null && s1 > 0 && (
+              <g>
+                {Array.from({ length: s1 }, (_, i) => {
+                  return yayCiz(i, i + 1, '#F59E0B', i);
+                })}
+              </g>
+            )}
+
+            {/* Animasyonlu yay oklar (OK İŞARETİ YOK) */}
             {animasyonBasladi && s1 !== null && s2 !== null && (
               <g>
                 {Array.from({ length: animasyonAdim }, (_, i) => {
                   if (islem === 'toplama') {
-                    // Toplama: sağa doğru mavi yaylar
-                    return yayOkCiz(s1 + i, s1 + i + 1, '#3B82F6', i);
+                    // Toplama: sağa doğru sarı yaylar (OK YOK)
+                    return yayCiz(s1 + i, s1 + i + 1, '#F59E0B', i);
                   } else {
-                    // Çıkarma: sola doğru sarı yaylar
-                    return yayOkCiz(s1 - i, s1 - i - 1, '#F59E0B', i);
+                    // Çıkarma: sola doğru sarı yaylar (OK YOK)
+                    return yayCiz(s1 - i, s1 - i - 1, '#F59E0B', i);
                   }
                 })}
               </g>
@@ -431,7 +422,7 @@ function SayiDogrusuSVG() {
               👆 Yukarıdan sayıları gir ve "Başla" butonuna bas!
             </p>
             <p className="text-2xl font-bold mt-4" style={{ color: '#000' }}>
-              {islem === 'toplama' ? '🔵 Mavi oklar sağa doğru ilerleyecek' : '🟡 Sarı oklar sola doğru gidecek'}
+              {islem === 'toplama' ? '🟡 Sarı yaylar sağa doğru ilerleyecek' : '🟡 Sarı yaylar sola doğru gidecek'}
             </p>
           </div>
         )}
