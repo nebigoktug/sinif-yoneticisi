@@ -91,8 +91,13 @@ function SayiDogrusuSVG() {
     const ortaX = (x1 + x2) / 2;
     
     // Ok ucu koordinatları
-    const okUcuBoyut = 12;
+    const okUcuBoyut = 18; // Daha büyük ok ucu
     const yon = x2 > x1 ? 1 : -1;
+    
+    // Ok ucu için yay eğrisi üzerindeki açı hesaplaması
+    // Basitleştirilmiş: yatay ok ucu
+    const okX = x2;
+    const okY = cizgiY;
     
     return (
       <g key={index}>
@@ -101,22 +106,26 @@ function SayiDogrusuSVG() {
           d={`M ${x1} ${cizgiY} Q ${ortaX} ${kontrolY} ${x2} ${cizgiY}`}
           fill="none"
           stroke={renk}
-          strokeWidth="6"
+          strokeWidth="8"
           strokeLinecap="round"
           className="animate-pulse"
         />
-        {/* Ok ucu */}
+        {/* Belirgin ok başı - üçgen */}
         <polygon
-          points={`${x2},${cizgiY} ${x2 - yon * okUcuBoyut},${cizgiY - okUcuBoyut} ${x2 - yon * okUcuBoyut},${cizgiY + okUcuBoyut}`}
+          points={`${okX},${okY} ${okX - yon * okUcuBoyut},${okY - okUcuBoyut} ${okX - yon * okUcuBoyut},${okY + okUcuBoyut}`}
           fill={renk}
+          stroke={renk}
+          strokeWidth="3"
           className="animate-pulse"
+          style={{ filter: 'drop-shadow(0 0 4px rgba(0,0,0,0.4))' }}
         />
-        {/* Adım numarası */}
+        {/* Adım numarası - SİYAH */}
         <text
           x={ortaX}
           y={kontrolY - 15}
           textAnchor="middle"
-          className="text-3xl font-black fill-gray-900"
+          className="text-3xl font-black"
+          fill="#000"
           style={{ filter: 'drop-shadow(2px 2px 4px rgba(255,255,255,0.95))' }}
         >
           {index + 1}
@@ -138,9 +147,10 @@ function SayiDogrusuSVG() {
             }}
             className={`w-full p-10 rounded-3xl font-black text-4xl transition-all transform hover:scale-105 ${
               islem === 'toplama'
-                ? 'bg-gradient-to-br from-blue-400 to-blue-600 text-white shadow-2xl scale-105'
-                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                ? 'bg-gradient-to-br from-blue-400 to-blue-600 shadow-2xl scale-105'
+                : 'bg-gray-100 hover:bg-gray-200'
             }`}
+            style={{ color: '#000' }}
           >
             ➕ Toplama
           </button>
@@ -151,9 +161,10 @@ function SayiDogrusuSVG() {
             }}
             className={`w-full p-10 rounded-3xl font-black text-4xl transition-all transform hover:scale-105 ${
               islem === 'cikarma'
-                ? 'bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-2xl scale-105'
-                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                ? 'bg-gradient-to-br from-orange-400 to-orange-600 shadow-2xl scale-105'
+                : 'bg-gray-100 hover:bg-gray-200'
             }`}
+            style={{ color: '#000' }}
           >
             ➖ Çıkarma
           </button>
@@ -162,8 +173,8 @@ function SayiDogrusuSVG() {
         {/* Sayı Girişleri - width: 100% */}
         <div className="w-full grid grid-cols-2 gap-6 mb-8">
           <div className="w-full">
-            <label className="block text-3xl font-black text-gray-900 mb-4">
-              {islem === 'toplama' ? '🔵 Başlangıç Sayısı' : '🔵 Büyük Sayı'}
+            <label className="block text-3xl font-black mb-4" style={{ color: '#000' }}>
+              🔵 {islem === 'toplama' ? 'Başlangıç Sayısı' : 'Büyük Sayı'}
             </label>
             <input
               type="number"
@@ -175,14 +186,15 @@ function SayiDogrusuSVG() {
                 setAnimasyonAdim(0);
               }}
               className="w-full p-8 text-5xl font-black text-center border-6 border-blue-400 rounded-3xl focus:border-blue-600 focus:outline-none bg-blue-50 shadow-lg"
+              style={{ color: '#000' }}
               placeholder="?"
               min={0}
               max={20}
             />
           </div>
           <div className="w-full">
-            <label className="block text-3xl font-black text-gray-900 mb-4">
-              {islem === 'toplama' ? '🟡 Eklenecek Sayı' : '🟡 Çıkarılacak Sayı'}
+            <label className="block text-3xl font-black mb-4" style={{ color: '#000' }}>
+              🟡 {islem === 'toplama' ? 'Eklenecek Sayı' : 'Çıkarılacak Sayı'}
             </label>
             <input
               type="number"
@@ -194,6 +206,7 @@ function SayiDogrusuSVG() {
                 setAnimasyonAdim(0);
               }}
               className="w-full p-8 text-5xl font-black text-center border-6 border-yellow-400 rounded-3xl focus:border-yellow-600 focus:outline-none bg-yellow-50 shadow-lg"
+              style={{ color: '#000' }}
               placeholder="?"
               min={0}
               max={20}
@@ -206,13 +219,15 @@ function SayiDogrusuSVG() {
           <button
             onClick={baslat}
             disabled={!sayi1 || !sayi2 || animasyonBasladi}
-            className="w-full p-10 bg-gradient-to-br from-purple-500 to-purple-700 text-white rounded-3xl font-black text-4xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+            className="w-full p-10 bg-gradient-to-br from-purple-500 to-purple-700 rounded-3xl font-black text-4xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+            style={{ color: '#000' }}
           >
             🚀 Başla
           </button>
           <button
             onClick={sifirla}
-            className="w-full p-10 bg-gradient-to-br from-gray-500 to-gray-700 text-white rounded-3xl font-black text-4xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all transform hover:scale-105"
+            className="w-full p-10 bg-gradient-to-br from-gray-500 to-gray-700 rounded-3xl font-black text-4xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all transform hover:scale-105"
+            style={{ color: '#000' }}
           >
             🔄 Temizle
           </button>
@@ -222,8 +237,8 @@ function SayiDogrusuSVG() {
         {animasyonBitti && sonuc !== null && (
           <div className="w-full mt-8 p-10 bg-gradient-to-br from-green-100 to-emerald-200 rounded-3xl border-6 border-green-500 animate-bounce">
             <div className="text-center">
-              <div className="text-4xl font-black text-gray-900 mb-4">🎉 SONUÇ:</div>
-              <div className="text-7xl font-black text-green-700">
+              <div className="text-4xl font-black mb-4" style={{ color: '#000' }}>🎉 SONUÇ:</div>
+              <div className="text-7xl font-black" style={{ color: '#000' }}>
                 {s1} {islem === 'toplama' ? '+' : '-'} {s2} = {sonuc}
               </div>
             </div>
@@ -233,7 +248,7 @@ function SayiDogrusuSVG() {
 
       {/* SVG Sayı Doğrusu */}
       <div className="w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-3xl shadow-2xl p-8">
-        <h3 className="text-4xl font-black mb-8 text-gray-900 text-center">📏 Sayı Doğrusu</h3>
+        <h3 className="text-4xl font-black mb-8 text-center" style={{ color: '#000' }}>📏 Sayı Doğrusu</h3>
         
         {/* Responsive SVG container */}
         <div className="w-full">
@@ -300,12 +315,13 @@ function SayiDogrusuSVG() {
                     strokeWidth="5"
                     strokeLinecap="round"
                   />
-                  {/* Sayı - TÜM SAYILAR BÜYÜK VE NET - Renk koyulaştırıldı */}
+                  {/* Sayı - TÜM SAYILAR SİYAH */}
                   <text
                     x={x}
                     y={cizgiY + cizgiUzunlugu + 50}
                     textAnchor="middle"
-                    className={`${yaziBoyutu} ${yaziKalinlik} fill-gray-950`}
+                    className={`${yaziBoyutu} ${yaziKalinlik}`}
+                    fill="#000"
                     style={{ 
                       fontFamily: 'system-ui, -apple-system, sans-serif',
                       letterSpacing: '0.05em',
@@ -328,15 +344,27 @@ function SayiDogrusuSVG() {
                   fill="#3B82F6"
                   className="animate-pulse"
                 />
-                <text
-                  x={sayiPozisyonu(s1)}
-                  y={cizgiY - 35}
-                  textAnchor="middle"
-                  className="text-4xl font-black fill-blue-900"
-                  style={{ filter: 'drop-shadow(1px 1px 2px rgba(255,255,255,0.9))' }}
-                >
-                  🔵 {s1}
-                </text>
+                {/* Aşağı bakan ok ve "Başlangıç" etiketi */}
+                <g>
+                  {/* Aşağı bakan ok */}
+                  <polygon
+                    points={`${sayiPozisyonu(s1)},${cizgiY - 35} ${sayiPozisyonu(s1) - 12},${cizgiY - 50} ${sayiPozisyonu(s1) + 12},${cizgiY - 50}`}
+                    fill="#3B82F6"
+                    stroke="#000"
+                    strokeWidth="2"
+                  />
+                  {/* "Başlangıç" etiketi - SİYAH */}
+                  <text
+                    x={sayiPozisyonu(s1)}
+                    y={cizgiY - 60}
+                    textAnchor="middle"
+                    className="text-3xl font-black"
+                    fill="#000"
+                    style={{ filter: 'drop-shadow(1px 1px 2px rgba(255,255,255,0.9))' }}
+                  >
+                    Başlangıç
+                  </text>
+                </g>
               </g>
             )}
 
@@ -376,7 +404,8 @@ function SayiDogrusuSVG() {
                   x={sayiPozisyonu(sonuc)}
                   y={cizgiY + 8}
                   textAnchor="middle"
-                  className="text-3xl font-black fill-green-900"
+                  className="text-3xl font-black"
+                  fill="#000"
                 >
                   {sonuc}
                 </text>
@@ -384,7 +413,8 @@ function SayiDogrusuSVG() {
                   x={sayiPozisyonu(sonuc)}
                   y={cizgiY - 50}
                   textAnchor="middle"
-                  className="text-5xl font-black fill-green-800"
+                  className="text-5xl font-black"
+                  fill="#000"
                   style={{ filter: 'drop-shadow(1px 1px 2px rgba(255,255,255,0.9))' }}
                 >
                   🎯 SONUÇ!
@@ -397,10 +427,10 @@ function SayiDogrusuSVG() {
         {/* Açıklama */}
         {!animasyonBasladi && (
           <div className="text-center mt-8">
-            <p className="text-3xl font-black text-gray-900">
+            <p className="text-3xl font-black" style={{ color: '#000' }}>
               👆 Yukarıdan sayıları gir ve "Başla" butonuna bas!
             </p>
-            <p className="text-2xl font-bold text-gray-800 mt-4">
+            <p className="text-2xl font-bold mt-4" style={{ color: '#000' }}>
               {islem === 'toplama' ? '🔵 Mavi oklar sağa doğru ilerleyecek' : '🟡 Sarı oklar sola doğru gidecek'}
             </p>
           </div>
@@ -409,7 +439,7 @@ function SayiDogrusuSVG() {
         {/* Animasyon sırasında durum */}
         {animasyonBasladi && !animasyonBitti && (
           <div className="text-center mt-8">
-            <p className="text-3xl font-black text-purple-600 animate-pulse">
+            <p className="text-3xl font-black animate-pulse" style={{ color: '#000' }}>
               ⏳ Adım {animasyonAdim} / {s2}
             </p>
           </div>
@@ -429,7 +459,7 @@ export default function MatematikMateryal() {
           <h1 className="text-7xl font-black text-center bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 drop-shadow-lg">
             🔢 Matematik Materyalleri
           </h1>
-          <p className="text-center text-gray-900 font-black text-3xl">
+          <p className="text-center font-black text-3xl" style={{ color: '#000' }}>
             Sayı doğrusu ile toplama ve çıkarma öğren! 🎯
           </p>
         </div>
