@@ -8,11 +8,11 @@ export default function Picker({ onBack }) {
   const [excluded, setExcluded] = useStorage("sy_picker_excluded", []);
   const [avoidRepeat, setAvoidRepeat] = useStorage("sy_picker_norepeat", false);
   const [scoreMode, setScoreMode] = useStorage("sy_picker_score", false);
+  const [pickedToday, setPickedToday] = useStorage("sy_picker_today", []);
+  const [lastResult, setLastResult] = useStorage("sy_picker_last", null);
 
   const [result, setResult] = useState(null);
   const [spinning, setSpinning] = useState(false);
-  const [pickedToday, setPickedToday] = useState([]);
-  const [lastResult, setLastResult] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [activeTab, setActiveTab] = useState("pick");
   const intervalRef = useRef(null);
@@ -76,6 +76,18 @@ export default function Picker({ onBack }) {
 
   function resetPickedToday() {
     setPickedToday([]);
+    setLastResult(null);
+    setResult(null);
+  }
+
+  function resetAll() {
+    if (!confirm("Tüm ayarlar ve seçimler sıfırlansın mı?")) return;
+    setPickedToday([]);
+    setLastResult(null);
+    setResult(null);
+    setExcluded([]);
+    setAvoidRepeat(false);
+    setScoreMode(false);
   }
 
   const pool = getPool();
@@ -93,6 +105,7 @@ export default function Picker({ onBack }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">🎲 Rastgele Seçim</div>
+        <button className="bb" onClick={resetAll} style={{ marginLeft: "auto" }}>🔄</button>
       </div>
       <div className="mb">
 

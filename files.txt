@@ -28,7 +28,7 @@ src/components/Homework.jsx | 259 satır
 src/components/Notes.jsx | 273 satır
 src/components/Onboarding.jsx | 353 satır
 src/components/ParentMessage.jsx | 550 satır
-src/components/Picker.jsx | 263 satır
+src/components/Picker.jsx | 276 satır
 src/components/Points.jsx | 150 satır
 src/components/Schedule.jsx | 115 satır
 src/components/Seat.jsx | 345 satır
