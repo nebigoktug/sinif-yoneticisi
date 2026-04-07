@@ -127,16 +127,16 @@ function SayiDogrusuSVG() {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Kontrol Paneli */}
-      <div className="bg-white rounded-3xl shadow-2xl p-8">
-        {/* İşlem Seçimi */}
-        <div className="grid grid-cols-2 gap-6 mb-8">
+      {/* Kontrol Paneli - width: 100% */}
+      <div className="w-full bg-white rounded-3xl shadow-2xl p-8">
+        {/* İşlem Seçimi - width: 100% */}
+        <div className="w-full grid grid-cols-2 gap-6 mb-8">
           <button
             onClick={() => {
               setIslem('toplama');
               sifirla();
             }}
-            className={`p-10 rounded-3xl font-black text-4xl transition-all transform hover:scale-105 ${
+            className={`w-full p-10 rounded-3xl font-black text-4xl transition-all transform hover:scale-105 ${
               islem === 'toplama'
                 ? 'bg-gradient-to-br from-blue-400 to-blue-600 text-white shadow-2xl scale-105'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -149,7 +149,7 @@ function SayiDogrusuSVG() {
               setIslem('cikarma');
               sifirla();
             }}
-            className={`p-10 rounded-3xl font-black text-4xl transition-all transform hover:scale-105 ${
+            className={`w-full p-10 rounded-3xl font-black text-4xl transition-all transform hover:scale-105 ${
               islem === 'cikarma'
                 ? 'bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-2xl scale-105'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -159,9 +159,9 @@ function SayiDogrusuSVG() {
           </button>
         </div>
 
-        {/* Sayı Girişleri */}
-        <div className="grid grid-cols-2 gap-6 mb-8">
-          <div>
+        {/* Sayı Girişleri - width: 100% */}
+        <div className="w-full grid grid-cols-2 gap-6 mb-8">
+          <div className="w-full">
             <label className="block text-3xl font-black text-gray-700 mb-4">
               {islem === 'toplama' ? '🔵 Başlangıç Sayısı' : '🔵 Büyük Sayı'}
             </label>
@@ -180,7 +180,7 @@ function SayiDogrusuSVG() {
               max={20}
             />
           </div>
-          <div>
+          <div className="w-full">
             <label className="block text-3xl font-black text-gray-700 mb-4">
               {islem === 'toplama' ? '🟡 Eklenecek Sayı' : '🟡 Çıkarılacak Sayı'}
             </label>
@@ -201,26 +201,26 @@ function SayiDogrusuSVG() {
           </div>
         </div>
 
-        {/* Butonlar */}
-        <div className="grid grid-cols-2 gap-6">
+        {/* Butonlar - width: 100% */}
+        <div className="w-full grid grid-cols-2 gap-6">
           <button
             onClick={baslat}
             disabled={!sayi1 || !sayi2 || animasyonBasladi}
-            className="p-10 bg-gradient-to-br from-purple-500 to-purple-700 text-white rounded-3xl font-black text-4xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+            className="w-full p-10 bg-gradient-to-br from-purple-500 to-purple-700 text-white rounded-3xl font-black text-4xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
           >
             🚀 Başla
           </button>
           <button
             onClick={sifirla}
-            className="p-10 bg-gradient-to-br from-gray-500 to-gray-700 text-white rounded-3xl font-black text-4xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all transform hover:scale-105"
+            className="w-full p-10 bg-gradient-to-br from-gray-500 to-gray-700 text-white rounded-3xl font-black text-4xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all transform hover:scale-105"
           >
             🔄 Temizle
           </button>
         </div>
 
-        {/* Sonuç Gösterimi */}
+        {/* Sonuç Gösterimi - width: 100% */}
         {animasyonBitti && sonuc !== null && (
-          <div className="mt-8 p-10 bg-gradient-to-br from-green-100 to-emerald-200 rounded-3xl border-6 border-green-500 animate-bounce">
+          <div className="w-full mt-8 p-10 bg-gradient-to-br from-green-100 to-emerald-200 rounded-3xl border-6 border-green-500 animate-bounce">
             <div className="text-center">
               <div className="text-4xl font-black text-gray-700 mb-4">🎉 SONUÇ:</div>
               <div className="text-7xl font-black text-green-700">
@@ -232,7 +232,7 @@ function SayiDogrusuSVG() {
       </div>
 
       {/* SVG Sayı Doğrusu */}
-      <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-3xl shadow-2xl p-8">
+      <div className="w-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-3xl shadow-2xl p-8">
         <h3 className="text-4xl font-black mb-8 text-gray-800 text-center">📏 Sayı Doğrusu</h3>
         
         {/* Responsive SVG container */}
@@ -245,16 +245,18 @@ function SayiDogrusuSVG() {
           >
             {/* Ana çizgi */}
             <defs>
+              {/* SOL OK - Düzeltildi: sola bakan ok */}
               <marker
                 id="okBaslangic"
                 markerWidth="20"
                 markerHeight="20"
                 refX="10"
                 refY="10"
-                orient="auto-start-reverse"
+                orient="auto"
               >
-                <polygon points="0,10 20,0 20,20" fill="#4B5563" />
+                <polygon points="20,10 0,0 0,20" fill="#4B5563" />
               </marker>
+              {/* SAĞ OK */}
               <marker
                 id="okBitis"
                 markerWidth="20"
@@ -419,20 +421,22 @@ function SayiDogrusuSVG() {
 // Ana Bileşen
 export default function MatematikMateryal() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 p-6">
-      {/* Başlık */}
-      <div className="max-w-7xl mx-auto mb-8">
-        <h1 className="text-7xl font-black text-center bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 drop-shadow-lg">
-          🔢 Matematik Materyalleri
-        </h1>
-        <p className="text-center text-gray-700 font-black text-3xl">
-          Sayı doğrusu ile toplama ve çıkarma öğren! 🎯
-        </p>
-      </div>
+    <div className="min-h-screen" style={{ backgroundColor: '#FFF9F0' }}>
+      <div className="p-6">
+        {/* Başlık */}
+        <div className="max-w-7xl mx-auto mb-8">
+          <h1 className="text-7xl font-black text-center bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 drop-shadow-lg">
+            🔢 Matematik Materyalleri
+          </h1>
+          <p className="text-center text-gray-700 font-black text-3xl">
+            Sayı doğrusu ile toplama ve çıkarma öğren! 🎯
+          </p>
+        </div>
 
-      {/* Materyal */}
-      <div className="max-w-7xl mx-auto">
-        <SayiDogrusuSVG />
+        {/* Materyal */}
+        <div className="max-w-7xl mx-auto">
+          <SayiDogrusuSVG />
+        </div>
       </div>
     </div>
   );
