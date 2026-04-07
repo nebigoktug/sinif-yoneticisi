@@ -83,16 +83,16 @@ function SayiDogrusuSVG() {
   const s2 = sayi2 ? parseInt(sayi2) : null;
   const sonuc = s1 !== null && s2 !== null ? (islem === 'toplama' ? s1 + s2 : s1 - s2) : null;
 
-  // Yay çizme fonksiyonu (OK İŞARETİ YOK)
-  const yayCiz = (baslangic, bitis, renk, index) => {
+  // Yay çizme fonksiyonu - BAŞLANGIÇ SAYISI (SARI, YUKARI YAY)
+  const yayBaslangicCiz = (baslangic, bitis, renk, index) => {
     const x1 = sayiPozisyonu(baslangic);
     const x2 = sayiPozisyonu(bitis);
-    const kontrolY = cizgiY - 60; // Yayın yüksekliği
+    const kontrolY = cizgiY - 60; // Yayın yüksekliği (yukarı)
     const ortaX = (x1 + x2) / 2;
     
     return (
-      <g key={index}>
-        {/* Yay çizgisi - OK YOK */}
+      <g key={`baslangic-${index}`}>
+        {/* Yay çizgisi - Yukarı */}
         <path
           d={`M ${x1} ${cizgiY} Q ${ortaX} ${kontrolY} ${x2} ${cizgiY}`}
           fill="none"
@@ -105,6 +105,39 @@ function SayiDogrusuSVG() {
         <text
           x={ortaX}
           y={kontrolY - 15}
+          textAnchor="middle"
+          className="text-3xl font-black"
+          fill="#000"
+          style={{ filter: 'drop-shadow(2px 2px 4px rgba(255,255,255,0.95))' }}
+        >
+          {index + 1}
+        </text>
+      </g>
+    );
+  };
+
+  // Yay çizme fonksiyonu - EKLENECEKÇIKARILABİLECEK SAYI (KIRMIZI, AŞAĞI YAY)
+  const yayAnimasyonCiz = (baslangic, bitis, renk, index) => {
+    const x1 = sayiPozisyonu(baslangic);
+    const x2 = sayiPozisyonu(bitis);
+    const kontrolY = cizgiY + 60; // Yayın yüksekliği (aşağı - horizontal mirror)
+    const ortaX = (x1 + x2) / 2;
+    
+    return (
+      <g key={`animasyon-${index}`}>
+        {/* Yay çizgisi - Aşağı (mirror) */}
+        <path
+          d={`M ${x1} ${cizgiY} Q ${ortaX} ${kontrolY} ${x2} ${cizgiY}`}
+          fill="none"
+          stroke={renk}
+          strokeWidth="8"
+          strokeLinecap="round"
+          className="animate-pulse"
+        />
+        {/* Adım numarası - SİYAH */}
+        <text
+          x={ortaX}
+          y={kontrolY + 30}
           textAnchor="middle"
           className="text-3xl font-black"
           fill="#000"
@@ -176,7 +209,7 @@ function SayiDogrusuSVG() {
           </div>
           <div className="w-full">
             <label className="block text-3xl font-black mb-4" style={{ color: '#000' }}>
-              🟡 {islem === 'toplama' ? 'Eklenecek Sayı' : 'Çıkarılacak Sayı'}
+              🔴 {islem === 'toplama' ? 'Eklenecek Sayı' : 'Çıkarılacak Sayı'}
             </label>
             <input
               type="number"
@@ -187,7 +220,7 @@ function SayiDogrusuSVG() {
                 setAnimasyonBitti(false);
                 setAnimasyonAdim(0);
               }}
-              className="w-full p-8 text-5xl font-black text-center border-6 border-yellow-400 rounded-3xl focus:border-yellow-600 focus:outline-none bg-yellow-50 shadow-lg"
+              className="w-full p-8 text-5xl font-black text-center border-6 border-red-400 rounded-3xl focus:border-red-600 focus:outline-none bg-red-50 shadow-lg"
               style={{ color: '#000' }}
               placeholder="?"
               min={0}
@@ -350,25 +383,25 @@ function SayiDogrusuSVG() {
               </g>
             )}
 
-            {/* Başlangıç sayısını sarı yaylar ile çiz (0'dan başlayarak) */}
+            {/* Başlangıç sayısını sarı yaylar ile çiz (0'dan başlayarak) - YUKARI YAYLAR */}
             {s1 !== null && s1 > 0 && (
               <g>
                 {Array.from({ length: s1 }, (_, i) => {
-                  return yayCiz(i, i + 1, '#F59E0B', i);
+                  return yayBaslangicCiz(i, i + 1, '#F59E0B', i);
                 })}
               </g>
             )}
 
-            {/* Animasyonlu yay oklar (OK İŞARETİ YOK) */}
+            {/* Animasyonlu yay oklar - KIRMIZI, AŞAĞI YAYLAR (HORIZONTAL MIRROR) */}
             {animasyonBasladi && s1 !== null && s2 !== null && (
               <g>
                 {Array.from({ length: animasyonAdim }, (_, i) => {
                   if (islem === 'toplama') {
-                    // Toplama: sağa doğru sarı yaylar (OK YOK)
-                    return yayCiz(s1 + i, s1 + i + 1, '#F59E0B', i);
+                    // Toplama: sağa doğru kırmızı yaylar (aşağı)
+                    return yayAnimasyonCiz(s1 + i, s1 + i + 1, '#EF4444', i);
                   } else {
-                    // Çıkarma: sola doğru sarı yaylar (OK YOK)
-                    return yayCiz(s1 - i, s1 - i - 1, '#F59E0B', i);
+                    // Çıkarma: sola doğru kırmızı yaylar (aşağı)
+                    return yayAnimasyonCiz(s1 - i, s1 - i - 1, '#EF4444', i);
                   }
                 })}
               </g>
@@ -422,7 +455,10 @@ function SayiDogrusuSVG() {
               👆 Yukarıdan sayıları gir ve "Başla" butonuna bas!
             </p>
             <p className="text-2xl font-bold mt-4" style={{ color: '#000' }}>
-              {islem === 'toplama' ? '🟡 Sarı yaylar sağa doğru ilerleyecek' : '🟡 Sarı yaylar sola doğru gidecek'}
+              🟡 Sarı yaylar başlangıç sayısını gösterir (yukarıda)
+            </p>
+            <p className="text-2xl font-bold mt-2" style={{ color: '#000' }}>
+              {islem === 'toplama' ? '🔴 Kırmızı yaylar sağa doğru ilerleyecek (aşağıda)' : '🔴 Kırmızı yaylar sola doğru gidecek (aşağıda)'}
             </p>
           </div>
         )}
