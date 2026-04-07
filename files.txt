@@ -25,7 +25,7 @@ src/components/ClassList.jsx | 178 satır
 src/components/Contacts.jsx | 81 satır
 src/components/HomeWidgets.jsx | 268 satır
 src/components/Homework.jsx | 259 satır
-src/components/MatematikMateryal.jsx | 442 satır
+src/components/MatematikMateryal.jsx | 443 satır
 src/components/Notes.jsx | 273 satır
 src/components/Onboarding.jsx | 353 satır
 src/components/ParentMessage.jsx | 550 satır

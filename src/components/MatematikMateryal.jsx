@@ -116,8 +116,8 @@ function SayiDogrusuSVG() {
           x={ortaX}
           y={kontrolY - 15}
           textAnchor="middle"
-          className="text-3xl font-black fill-gray-800"
-          style={{ filter: 'drop-shadow(1px 1px 3px rgba(255,255,255,0.8))' }}
+          className="text-3xl font-black fill-gray-900"
+          style={{ filter: 'drop-shadow(2px 2px 4px rgba(255,255,255,0.95))' }}
         >
           {index + 1}
         </text>
@@ -245,16 +245,16 @@ function SayiDogrusuSVG() {
           >
             {/* Ana çizgi */}
             <defs>
-              {/* SOL OK - Düzeltildi: sola bakan ok */}
+              {/* SOL OK - Düzeltildi: sağ okun tam tersi, sola bakan */}
               <marker
                 id="okBaslangic"
                 markerWidth="20"
                 markerHeight="20"
-                refX="10"
+                refX="0"
                 refY="10"
                 orient="auto"
               >
-                <polygon points="20,10 0,0 0,20" fill="#4B5563" />
+                <polygon points="20,10 0,0 0,20" fill="#1F2937" />
               </marker>
               {/* SAĞ OK */}
               <marker
@@ -265,7 +265,7 @@ function SayiDogrusuSVG() {
                 refY="10"
                 orient="auto"
               >
-                <polygon points="0,0 0,20 20,10" fill="#4B5563" />
+                <polygon points="0,0 0,20 20,10" fill="#1F2937" />
               </marker>
             </defs>
 
@@ -275,8 +275,8 @@ function SayiDogrusuSVG() {
               y1={cizgiY}
               x2={cizgiBitis + 30}
               y2={cizgiY}
-              stroke="#4B5563"
-              strokeWidth="4"
+              stroke="#1F2937"
+              strokeWidth="5"
               markerStart="url(#okBaslangic)"
               markerEnd="url(#okBitis)"
             />
@@ -296,19 +296,20 @@ function SayiDogrusuSVG() {
                     y1={cizgiY - cizgiUzunlugu}
                     x2={x}
                     y2={cizgiY + cizgiUzunlugu}
-                    stroke="#4B5563"
-                    strokeWidth="4"
+                    stroke="#1F2937"
+                    strokeWidth="5"
                     strokeLinecap="round"
                   />
-                  {/* Sayı - TÜM SAYILAR BÜYÜK VE NET */}
+                  {/* Sayı - TÜM SAYILAR BÜYÜK VE NET - Opaklık artırıldı */}
                   <text
                     x={x}
                     y={cizgiY + cizgiUzunlugu + 50}
                     textAnchor="middle"
-                    className={`${yaziBoyutu} ${yaziKalinlik} fill-gray-800`}
+                    className={`${yaziBoyutu} ${yaziKalinlik} fill-gray-900`}
                     style={{ 
                       fontFamily: 'system-ui, -apple-system, sans-serif',
-                      letterSpacing: '0.05em'
+                      letterSpacing: '0.05em',
+                      filter: 'drop-shadow(2px 2px 3px rgba(255,255,255,0.95))'
                     }}
                   >
                     {num}
@@ -331,8 +332,8 @@ function SayiDogrusuSVG() {
                   x={sayiPozisyonu(s1)}
                   y={cizgiY - 35}
                   textAnchor="middle"
-                  className="text-4xl font-black fill-blue-600"
-                  style={{ filter: 'drop-shadow(1px 1px 2px rgba(255,255,255,0.9))' }}
+                  className="text-4xl font-black fill-blue-700"
+                  style={{ filter: 'drop-shadow(2px 2px 4px rgba(255,255,255,0.95))' }}
                 >
                   🔵 {s1}
                 </text>
@@ -375,7 +376,7 @@ function SayiDogrusuSVG() {
                   x={sayiPozisyonu(sonuc)}
                   y={cizgiY + 8}
                   textAnchor="middle"
-                  className="text-3xl font-black fill-green-700"
+                  className="text-3xl font-black fill-green-800"
                 >
                   {sonuc}
                 </text>
@@ -383,8 +384,8 @@ function SayiDogrusuSVG() {
                   x={sayiPozisyonu(sonuc)}
                   y={cizgiY - 50}
                   textAnchor="middle"
-                  className="text-5xl font-black fill-green-600"
-                  style={{ filter: 'drop-shadow(1px 1px 2px rgba(255,255,255,0.9))' }}
+                  className="text-5xl font-black fill-green-700"
+                  style={{ filter: 'drop-shadow(2px 2px 4px rgba(255,255,255,0.95))' }}
                 >
                   🎯 SONUÇ!
                 </text>
@@ -396,10 +397,10 @@ function SayiDogrusuSVG() {
         {/* Açıklama */}
         {!animasyonBasladi && (
           <div className="text-center mt-8">
-            <p className="text-3xl font-black text-gray-600">
+            <p className="text-3xl font-black text-gray-700">
               👆 Yukarıdan sayıları gir ve "Başla" butonuna bas!
             </p>
-            <p className="text-2xl font-bold text-gray-500 mt-4">
+            <p className="text-2xl font-bold text-gray-600 mt-4">
               {islem === 'toplama' ? '🔵 Mavi oklar sağa doğru ilerleyecek' : '🟡 Sarı oklar sola doğru gidecek'}
             </p>
           </div>
