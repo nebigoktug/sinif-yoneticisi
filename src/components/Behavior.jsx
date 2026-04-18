@@ -2,6 +2,15 @@ import { useState } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { migrateLegacy, getTodayKey } from "../utils/helpers";
 import { BEHAVIORS } from "../data/constants";
+import HelpButton from "./HelpButton";
+
+const HELP = [
+  "Öğrencinin kartına tıklayarak detay panelini aç.",
+  "+ / − ile davranış sayısını artır veya azalt.",
+  "Davranış → Puan otomasyonu açıksa her + için -1 puan düşer, her − için geri gelir.",
+  "Notlar alanına günlük özel not ekleyebilirsin.",
+  "Üstteki renkli çubuk tüm sınıfın davranış özetini gösterir.",
+];
 
 export default function Behavior({ onBack }) {
   const [students] = useStorage("sy_students", migrateLegacy(localStorage.getItem("sy_students")));
@@ -76,6 +85,16 @@ export default function Behavior({ onBack }) {
       [todayKey]: { ...todayRecords, [name]: { ...rec, behaviors: newBehaviors } },
     };
     setHistory(newHistory);
+
+    if (settings.behaviorAutoPenalty) {
+      const dayData = pointsHistory[todayKey] || {};
+      const entries = dayData[name] || [];
+      const lastPenaltyIdx = entries.map((e, i) => i).filter((i) => entries[i].label === "Otomatik Ceza").pop();
+      if (lastPenaltyIdx !== undefined) {
+        const newEntries = entries.filter((_, i) => i !== lastPenaltyIdx);
+        setPointsHistory({ ...pointsHistory, [todayKey]: { ...dayData, [name]: newEntries } });
+      }
+    }
   }
 
   function setNote(name, note) {
@@ -98,6 +117,7 @@ export default function Behavior({ onBack }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">📋 Yaramazlık Takibi</div>
+        <HelpButton title="📋 Yaramazlık Takibi" items={HELP} />
       </div>
 
       {/* İstatistik çubuğu */}

@@ -22,7 +22,7 @@ export default function App() {
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
   const [onboardingMode, setOnboardingMode] = useState(null); // null | "quick" | "detailed"
-  const [settings] = useStorage("sy_settings", {
+  const [settings, setSettings] = useStorage("sy_settings", {
     theme: "turuncu",
     className: "3-B",
     moduleOrder: ALL_MODULES.map((m) => m.id),
@@ -53,9 +53,9 @@ export default function App() {
     const missing = allIds.filter((id) => !currentOrder.includes(id));
     if (missing.length > 0) {
       const newOrder = [...currentOrder.filter((id) => allIds.includes(id)), ...missing];
-      const updated = { ...settings, moduleOrder: newOrder };
-      localStorage.setItem("sy_settings", JSON.stringify(updated));
+      setSettings((prev) => ({ ...prev, moduleOrder: newOrder }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // İlk açılış kontrolü

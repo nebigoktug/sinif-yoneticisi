@@ -2,6 +2,15 @@ import { useState } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { migrateLegacy, getTodayKey } from "../utils/helpers";
 import { MSG_TEMPLATES } from "../data/constants";
+import HelpButton from "./HelpButton";
+
+const HELP = [
+  "Öğrenci + şablon seçerek WhatsApp mesajı oluştur.",
+  "Otomatik Doldur bugünkü davranış ve ödev bilgisini ekler.",
+  "Toplu sekmesiyle tüm sınıfa aynı şablonu sırayla gönderebilirsin.",
+  "Şablonlar sekmesinde kendi mesaj şablonlarını oluşturabilirsin.",
+  "{student} = öğrenci adı, {detail} = otomatik detay yer tutucusu.",
+];
 
 const DAYS = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma"];
 const DEFAULT_TIMES = ["08:30", "09:20", "10:10", "11:00", "11:50", "12:40", "13:30", "14:20"];
@@ -67,6 +76,13 @@ const TABS = [
   { id: "sablon", label: "Şablonlar" },
   { id: "gecmis", label: "Geçmiş" },
 ];
+
+function normalizePhone(raw) {
+  const digits = raw.replace(/\D/g, "");
+  if (digits.startsWith("90") && digits.length >= 11) return digits;
+  if (digits.startsWith("0")) return "90" + digits.slice(1);
+  return "90" + digits;
+}
 
 // ─── Bileşen ─────────────────────────────────────────────
 export default function ParentMessage({ onBack }) {
@@ -144,7 +160,7 @@ export default function ParentMessage({ onBack }) {
       return;
     }
     if (!phone) return;
-    const url = `https://wa.me/90${phone.replace(/\D/g, "")}?text=${encodeURIComponent(tekMessage)}`;
+    const url = `https://wa.me/${normalizePhone(phone)}?text=${encodeURIComponent(tekMessage)}`;
     window.open(url, "_blank");
     recordSend(tekStudent, tekTemplate.title, tekMessage);
     setTekSent(true);
@@ -179,7 +195,7 @@ export default function ParentMessage({ onBack }) {
       const detail = buildAutoDetail(studentName, history, homeworkHistory);
       message = buildMessage(topluTemplate.tpl, studentName, detail);
     }
-    const url = `https://wa.me/90${phone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/${normalizePhone(phone)}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
     recordSend(studentName, topluTemplate.title, message);
     setTopluSent((prev) => ({ ...prev, [studentName]: true }));
@@ -220,6 +236,7 @@ export default function ParentMessage({ onBack }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">📨 Veli Mesajı</div>
+        <HelpButton title="📨 Veli Mesajı" items={HELP} />
       </div>
 
       <div style={{ display: "flex", gap: 6, padding: "10px 16px 0", overflowX: "auto" }}>

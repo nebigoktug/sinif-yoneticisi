@@ -2,6 +2,15 @@ import { useState, useRef } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { migrateLegacy } from "../utils/helpers";
 import { LAYOUT_PRESETS } from "../data/constants";
+import HelpButton from "./HelpButton";
+
+const HELP = [
+  "Otomatik ile öğrenciler rastgele yerleştirilir.",
+  "İki sıraya sırayla tıklayarak yer değiştir; sürükle-bırak da çalışır.",
+  "Kurallar sekmesinde yan yana oturmaması gerekenleri belirt.",
+  "⚠️ işareti aktif kural ihlalini gösterir.",
+  "Preset veya özel boyutla düzeni değiştirebilirsin (maks. 8×12).",
+];
 
 export default function Seat({ onBack }) {
   const [students] = useStorage("sy_students", migrateLegacy(localStorage.getItem("sy_students")));
@@ -69,7 +78,7 @@ export default function Seat({ onBack }) {
 
   function getNeighborKeys(key) {
     const [col, row, side] = key.split("-");
-    const c = parseInt(col), r = parseInt(row);
+    const c = parseInt(col, 10), r = parseInt(row, 10);
     const otherSide = side === "left" ? "right" : "left";
     const keys = [`${c}-${r}-${otherSide}`];
     if (r > 0) { keys.push(`${c}-${r - 1}-left`); keys.push(`${c}-${r - 1}-right`); }
@@ -89,7 +98,7 @@ export default function Seat({ onBack }) {
             keys.push(getSeatKey(col, row, side));
 
       let valid = true;
-      for (let i = 0; i < shuffled.length; i++) {
+      for (let i = 0; i < Math.min(shuffled.length, keys.length); i++) {
         newMap[keys[i]] = shuffled[i].name;
       }
 
@@ -168,6 +177,7 @@ export default function Seat({ onBack }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">🪑 Oturma Düzeni</div>
+        <HelpButton title="🪑 Oturma Düzeni" items={HELP} />
       </div>
       <div className="mb">
 

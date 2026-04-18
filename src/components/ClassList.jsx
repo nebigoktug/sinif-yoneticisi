@@ -1,12 +1,23 @@
 import { useState } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { genId, migrateLegacy } from "../utils/helpers";
+import HelpButton from "./HelpButton";
+
+const HELP = [
+  "Tek ekle: isim yaz, Enter'a bas ya da Ekle'ye tıkla.",
+  "Liste halinde ekle: E-Okul'dan kopyalanan listeyi yapıştır.",
+  "Aynı isimde öğrenci tekrar eklenemez.",
+  "Öğrenci silinince oturma düzeni ve seçim kuralları da temizlenir.",
+];
 
 export default function ClassList({ onBack }) {
   const [students, setStudents] = useStorage(
     "sy_students",
     migrateLegacy(localStorage.getItem("sy_students"))
   );
+  const [seatingMap, setSeatingMap] = useStorage("sy_seating", {});
+  const [excluded, setExcluded] = useStorage("sy_picker_excluded", []);
+  const [separations, setSeparations] = useStorage("sy_separations", []);
   const [input, setInput] = useState("");
   const [bulkMode, setBulkMode] = useState(false);
   const [bulkText, setBulkText] = useState("");
@@ -15,13 +26,22 @@ export default function ClassList({ onBack }) {
   function addStudent() {
     const name = input.trim();
     if (!name) return;
+    if (students.some((s) => s.name.toLowerCase() === name.toLowerCase())) return;
     setStudents([...students, { id: genId(), name }]);
     setInput("");
   }
 
   function removeStudent(id) {
     if (!confirm("Öğrenciyi sil?")) return;
+    const student = students.find((s) => s.id === id);
     setStudents(students.filter((s) => s.id !== id));
+    if (student) {
+      const newMap = { ...seatingMap };
+      Object.keys(newMap).forEach((k) => { if (newMap[k] === student.name) delete newMap[k]; });
+      setSeatingMap(newMap);
+      setExcluded(excluded.filter((x) => x !== id));
+      setSeparations(separations.filter((s) => s[0] !== student.name && s[1] !== student.name));
+    }
   }
 
   // Toplu metni satırlara böl, temizle, önizle
@@ -51,6 +71,7 @@ export default function ClassList({ onBack }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">👥 Sınıf Listesi</div>
+        <HelpButton title="👥 Sınıf Listesi" items={HELP} />
       </div>
       <div className="mb">
 

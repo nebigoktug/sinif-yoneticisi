@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { THEMES, ALL_MODULES } from "../data/constants";
+import HelpButton from "./HelpButton";
+
+const HELP = [
+  "Genel: sınıf adı, öğretmen adı ve okul adı.",
+  "Tema: uygulama rengini değiştir.",
+  "Modüller: ana ekrandaki modülleri sırala veya gizle.",
+  "Otomasyon: ödev/davranış otomatik bağlantılarını yönet.",
+  "Veri: tüm verileri JSON olarak yedekle veya geri yükle.",
+];
 
 export default function Settings({ onBack, onOpenGuide }) {
   const [settings, setSettings] = useStorage("sy_settings", {
@@ -38,9 +47,17 @@ export default function Settings({ onBack, onOpenGuide }) {
     update("moduleOrder", order);
   }
 
+  const DATA_KEYS = [
+    "sy_students", "sy_history", "sy_points", "sy_homework",
+    "sy_seating", "sy_layout", "sy_contacts", "sy_calendar", "sy_settings",
+    "sy_schedule", "sy_schedule_times", "sy_separations",
+    "sy_picker_excluded", "sy_picker_norepeat", "sy_picker_score",
+    "sy_msg_templates", "sy_msg_history",
+  ];
+
   function exportData() {
     const data = {};
-    ["sy_students", "sy_history", "sy_points", "sy_homework", "sy_seating", "sy_layout", "sy_contacts", "sy_calendar", "sy_settings"].forEach((k) => {
+    DATA_KEYS.forEach((k) => {
       data[k] = localStorage.getItem(k);
     });
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -70,7 +87,7 @@ export default function Settings({ onBack, onOpenGuide }) {
 
   function resetAll() {
     if (!confirm("Tüm veriler silinecek. Emin misin?")) return;
-    ["sy_students", "sy_history", "sy_points", "sy_homework", "sy_seating", "sy_layout", "sy_contacts", "sy_calendar", "sy_settings"].forEach((k) => localStorage.removeItem(k));
+    [...DATA_KEYS, "sy_onboarding_done"].forEach((k) => localStorage.removeItem(k));
     window.location.reload();
   }
 
@@ -88,6 +105,7 @@ export default function Settings({ onBack, onOpenGuide }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">⚙️ Ayarlar</div>
+        <HelpButton title="⚙️ Ayarlar" items={HELP} />
       </div>
       <div className="mb">
 

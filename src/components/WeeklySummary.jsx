@@ -1,6 +1,14 @@
 import { useStorage } from "../hooks/useStorage";
 import { migrateLegacy, formatDate } from "../utils/helpers";
 import { BEHAVIORS } from "../data/constants";
+import HelpButton from "./HelpButton";
+
+const HELP = [
+  "Son 7 günün davranış, puan ve ödev özetini gösterir.",
+  "En çok uyarı alan ve en yüksek puanlı öğrenciler listelenir.",
+  "En sık tekrarlanan davranış türü ayrıca vurgulanır.",
+  "Sayfanın altında tüm öğrencilerin detaylı istatistiği yer alır.",
+];
 
 function getTotalBehaviorCount(behaviors) {
   if (!behaviors || behaviors.length === 0) return 0;
@@ -39,7 +47,10 @@ export default function WeeklySummary({ onBack }) {
   }
 
   function getPoints(name) {
-    return Object.values(pointsHistory).flatMap((d) => d[name] || []).reduce((s, e) => s + e.pts, 0);
+    return last7.reduce((sum, key) => {
+      const entries = pointsHistory[key]?.[name] || [];
+      return sum + entries.reduce((s, e) => s + (e.pts || 0), 0);
+    }, 0);
   }
 
   function getMissingHomework(name) {
@@ -94,6 +105,7 @@ export default function WeeklySummary({ onBack }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">📈 Haftalık Özet</div>
+        <HelpButton title="📈 Haftalık Özet" items={HELP} />
       </div>
       <div className="mb">
         <div style={{ fontSize: 12, color: "var(--text3)", marginBottom: 16 }}>

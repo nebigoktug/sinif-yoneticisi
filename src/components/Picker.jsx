@@ -1,6 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { migrateLegacy, getTodayKey } from "../utils/helpers";
+import HelpButton from "./HelpButton";
+
+const HELP = [
+  "🎲 Seç ile sınıftan rastgele bir öğrenci seçilir.",
+  "Tekrar Seçme açıkken seçilen öğrenci havuzdan çıkar; hepsi bitince otomatik sıfırlanır.",
+  "🔄 Tekrar ile son seçileni geri alıp yeniden çekim yapabilirsin.",
+  "Puan Modu'nda seçilen öğrenciye doğru/yanlış puanı eklenebilir.",
+  "Ayarlar sekmesinden belirli öğrencileri kalıcı olarak hariç tutabilirsin.",
+];
 
 export default function Picker({ onBack }) {
   const [students] = useStorage("sy_students", migrateLegacy(localStorage.getItem("sy_students")));
@@ -19,15 +28,19 @@ export default function Picker({ onBack }) {
 
   const todayKey = getTodayKey();
 
-  function getPool() {
+  useEffect(() => {
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, []);
+
+  function getPool(currentPickedToday = pickedToday) {
     let pool = students.filter((s) => !excluded.includes(s.id));
-    if (avoidRepeat) pool = pool.filter((s) => !pickedToday.includes(s.id));
+    if (avoidRepeat) pool = pool.filter((s) => !currentPickedToday.includes(s.id));
     if (pool.length === 0 && avoidRepeat) pool = students.filter((s) => !excluded.includes(s.id));
     return pool;
   }
 
-  function pick() {
-    const pool = getPool();
+  function pick(overridePickedToday) {
+    const pool = getPool(overridePickedToday);
     if (pool.length === 0) return;
     setSpinning(true);
     setResult(null);
@@ -52,8 +65,9 @@ export default function Picker({ onBack }) {
 
   function pickAgain() {
     if (!lastResult) return;
-    setPickedToday((prev) => prev.filter((id) => id !== lastResult.id));
-    pick();
+    const newPickedToday = pickedToday.filter((id) => id !== lastResult.id);
+    setPickedToday(newPickedToday);
+    pick(newPickedToday);
   }
 
   function addPoint(pts) {
@@ -93,6 +107,7 @@ export default function Picker({ onBack }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">🎲 Rastgele Seçim</div>
+        <HelpButton title="🎲 Rastgele Seçim" items={HELP} />
       </div>
       <div className="mb">
 
@@ -143,7 +158,7 @@ export default function Picker({ onBack }) {
             )}
 
             <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-              <button className="bp" style={{ background: "var(--accent)" }} onClick={pick} disabled={spinning}>
+              <button className="bp" style={{ background: "var(--accent)" }} onClick={() => pick()} disabled={spinning}>
                 🎲 Seç
               </button>
               {lastResult && !spinning && (

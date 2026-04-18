@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { migrateLegacy } from "../utils/helpers";
+import HelpButton from "./HelpButton";
+
+const HELP = [
+  "Her öğrencinin veli adı ve telefon numarasını kaydet.",
+  "Numarayı 5321234567 formatında gir (başında 0 veya +90 olmadan).",
+  "Kayıtlı numaralar Veli Mesajı modülünde WhatsApp için kullanılır.",
+  "Düzenlemek için kaydın üzerindeki kalem ikonuna tıkla.",
+];
 
 export default function Contacts({ onBack }) {
   const [students] = useStorage("sy_students", migrateLegacy(localStorage.getItem("sy_students")));
@@ -28,6 +36,7 @@ export default function Contacts({ onBack }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">📱 Veli İletişim</div>
+        <HelpButton title="📱 Veli İletişim" items={HELP} />
       </div>
       <div className="mb">
         <input

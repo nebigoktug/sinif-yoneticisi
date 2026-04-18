@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { migrateLegacy, getTodayKey, formatDate } from "../utils/helpers";
+import HelpButton from "./HelpButton";
+
+const HELP = [
+  "Önce bugünün derslerini üstteki bölümden ekle.",
+  "Her öğrenci için ✓ (getirdi) veya ✗ (getirmedi) işaretle.",
+  "Aynı butona tekrar tıklamak işareti kaldırır.",
+  "Ödev → Davranış otomasyonu açıksa eksik ödev otomatik işaretlenir.",
+  "Ders silindiğinde o derse ait bugünkü işaretler temizlenir.",
+];
 
 export default function Homework({ onBack }) {
   const [students] = useStorage("sy_students", migrateLegacy(localStorage.getItem("sy_students")));
@@ -73,20 +82,20 @@ export default function Homework({ onBack }) {
       const rec = todayRec[studentName] || { behaviors: [], note: "" };
       const behaviors = normalizeBehaviors(rec.behaviors);
 
-      // Öğrencinin TÜM derslerdeki durumu hesapla
-      const allMissing = subjects.some((sub) => {
+      // Herhangi bir ders eksikse ceza ekle, hiç eksik yoksa kaldır
+      const anyMissing = subjects.some((sub) => {
         const val = sub === subject ? newValue : getStudentSubjectValue(studentName, sub);
         return val === false;
       });
 
       const existingPenalty = behaviors.find((b) => b.label === "Ödev Eksik");
 
-      if (allMissing && !existingPenalty) {
+      if (anyMissing && !existingPenalty) {
         setHistory({
           ...history,
           [todayKey]: { ...todayRec, [studentName]: { ...rec, behaviors: [...behaviors, { label: "Ödev Eksik", count: 1 }] } },
         });
-      } else if (!allMissing && existingPenalty) {
+      } else if (!anyMissing && existingPenalty) {
         setHistory({
           ...history,
           [todayKey]: { ...todayRec, [studentName]: { ...rec, behaviors: behaviors.filter((b) => b.label !== "Ödev Eksik") } },
@@ -121,6 +130,7 @@ export default function Homework({ onBack }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">📝 Ödev Takibi</div>
+        <HelpButton title="📝 Ödev Takibi" items={HELP} />
       </div>
       <div className="mb">
 

@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { EVENT_TYPES } from "../data/constants";
+import HelpButton from "./HelpButton";
+
+const HELP = [
+  "Bir güne tıklayarak etkinlik ekle.",
+  "Etkinlik türleri: Sınav, Ödev, Toplantı, Tatil, Diğer.",
+  "Yaklaşan etkinlikler ana ekranda widget olarak görünür.",
+  "Birden fazla etkinlik aynı güne eklenebilir.",
+  "Etkinliği silmek için kartın yanındaki Sil butonunu kullan.",
+];
 
 export default function Calendar({ onBack }) {
   const [events, setEvents] = useStorage("sy_calendar", {});
@@ -41,14 +50,15 @@ export default function Calendar({ onBack }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">📅 Takvim</div>
+        <HelpButton title="📅 Takvim" items={HELP} />
       </div>
       <div className="mb">
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
           <button className="bs" style={{ background: "var(--surface)", color: "var(--text)" }}
-            onClick={() => setViewDate(new Date(year, month - 1, 1))}>‹</button>
+            onClick={() => { setViewDate(new Date(year, month - 1, 1)); setSelectedDay(null); }}>‹</button>
           <span style={{ fontWeight: 800 }}>{MONTHS[month]} {year}</span>
           <button className="bs" style={{ background: "var(--surface)", color: "var(--text)" }}
-            onClick={() => setViewDate(new Date(year, month + 1, 1))}>›</button>
+            onClick={() => { setViewDate(new Date(year, month + 1, 1)); setSelectedDay(null); }}>›</button>
         </div>
 
         <div className="cal-grid">

@@ -2,6 +2,15 @@ import { useState } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { migrateLegacy, getTodayKey } from "../utils/helpers";
 import { POINT_ACTIONS } from "../data/constants";
+import HelpButton from "./HelpButton";
+
+const HELP = [
+  "+ / − butonlarıyla öğrenciye puan ekle veya çıkar.",
+  "Etiket yazarak kaydı daha açıklayıcı yapabilirsin.",
+  "Geçmiş sekmesinde tüm puan hareketlerini görebilirsin.",
+  "Puanlar büyükten küçüğe otomatik sıralanır.",
+  "Haftalık Özet modülü son 7 günün puanlarını özetler.",
+];
 
 export default function Points({ onBack }) {
   const [students] = useStorage("sy_students", migrateLegacy(localStorage.getItem("sy_students")));
@@ -32,6 +41,7 @@ export default function Points({ onBack }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">⭐ Puan & Ödül</div>
+        <HelpButton title="⭐ Puan & Ödül" items={HELP} />
       </div>
       <div className="mb">
         {sorted.map((s) => {

@@ -36,11 +36,12 @@ export default function HomeWidgets({ onNavigate }) {
   const homeworkDone = todaySubjects.length > 0 && Object.keys(todayHomework).length > 0;
 
   const totalWarnings = Object.values(todayBehavior).reduce(
-    (sum, r) => sum + getTotalBehaviorCount(r.behaviors), 0
+    (sum, r) => sum + (r && typeof r === "object" ? getTotalBehaviorCount(r.behaviors) : 0), 0
   );
 
   function getPoints(name) {
-    return Object.values(pointsHistory).flatMap((d) => d[name] || []).reduce((s, e) => s + e.pts, 0);
+    const entries = pointsHistory[todayKey]?.[name] || [];
+    return entries.reduce((s, e) => s + (e.pts || 0), 0);
   }
   const topStudent = [...students].sort((a, b) => getPoints(b.name) - getPoints(a.name))[0];
   const topPoints = topStudent ? getPoints(topStudent.name) : 0;

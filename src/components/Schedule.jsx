@@ -1,5 +1,13 @@
 import { useState } from "react";
 import { useStorage } from "../hooks/useStorage";
+import HelpButton from "./HelpButton";
+
+const HELP = [
+  "Sütunlar günleri, satırlar ders saatlerini gösterir.",
+  "Hücreye tıkla, ders adını yaz, Enter veya dışarı tıkla ile kaydet.",
+  "Ders saatlerini üstteki saat alanlarından düzenleyebilirsin.",
+  "Ders programını Veli Mesajı modülünden velilere gönderebilirsin.",
+];
 
 const DAYS = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma"];
 const DEFAULT_TIMES = ["08:30", "09:20", "10:10", "11:00", "11:50", "12:40", "13:30", "14:20"];
@@ -50,6 +58,7 @@ export default function Schedule({ onBack }) {
       <div className="mh">
         <button className="bb" onClick={onBack}>←</button>
         <div className="mt">📚 Ders Programı</div>
+        <HelpButton title="📚 Ders Programı" items={HELP} />
       </div>
       <div className="mb">
 
