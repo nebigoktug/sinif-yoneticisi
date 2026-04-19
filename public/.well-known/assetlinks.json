@@ -5,7 +5,8 @@
       "namespace": "android_app",
       "package_name": "tr.com.sinifyoneticisi.www.twa",
       "sha256_cert_fingerprints": [
-        "64:08:A2:97:3A:8B:A2:C5:0B:59:47:60:CE:6E:E1:02:7F:52:22:B6:A8:C2:B1:87:9B:E3:4B:2C:F1:51:84:FB"
+        "64:08:A2:97:3A:8B:A2:C5:0B:59:47:60:CE:6E:E1:02:7F:52:22:B6:A8:C2:B1:87:9B:E3:4B:2C:F1:51:84:FB",
+        "2E:D6:16:E5:9D:B3:51:AD:92:64:CC:73:CD:85:5F:C1:EB:E9:16:19:5C:83:96:0B:35:E1:12:1B:54:73:5D:DD"
       ]
     }
   }
