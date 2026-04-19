@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { EVENT_TYPES } from "../data/constants";
 import HelpButton from "./HelpButton";
@@ -11,15 +11,65 @@ const HELP = [
   "Etkinliği silmek için kartın yanındaki Sil butonunu kullan.",
 ];
 
+function dateRange(from, to) {
+  const result = [];
+  const cur = new Date(from);
+  const end = new Date(to);
+  while (cur <= end) {
+    result.push(cur.toISOString().slice(0, 10));
+    cur.setDate(cur.getDate() + 1);
+  }
+  return result;
+}
+
+const MEB_EVENTS = [
+  // Okul takvimi
+  { date: "2025-09-08", title: "Okul Açılışı" },
+  ...dateRange("2025-11-10", "2025-11-14").map((d) => ({ date: d, title: "I. Dönem Ara Tatili" })),
+  { date: "2026-01-16", title: "I. Dönem Sonu" },
+  ...dateRange("2026-01-19", "2026-01-30").map((d) => ({ date: d, title: "Yarıyıl Tatili" })),
+  { date: "2026-02-02", title: "II. Dönem Başlangıcı" },
+  ...dateRange("2026-03-16", "2026-03-20").map((d) => ({ date: d, title: "II. Dönem Ara Tatili" })),
+  { date: "2026-06-26", title: "Okul Kapanışı" },
+  // Resmi tatiller
+  { date: "2026-01-01", title: "Yılbaşı" },
+  ...dateRange("2026-03-19", "2026-03-22").map((d) => ({ date: d, title: "Ramazan Bayramı" })),
+  { date: "2026-04-23", title: "Ulusal Egemenlik ve Çocuk Bayramı" },
+  { date: "2026-05-01", title: "İşçi Bayramı" },
+  { date: "2026-05-19", title: "Atatürk'ü Anma Gençlik ve Spor Bayramı" },
+  ...dateRange("2026-05-26", "2026-05-30").map((d) => ({ date: d, title: "Kurban Bayramı" })),
+  { date: "2026-07-15", title: "Demokrasi ve Milli Birlik Günü" },
+  { date: "2026-08-30", title: "Zafer Bayramı" },
+  { date: "2026-10-29", title: "Cumhuriyet Bayramı" },
+];
+
+const DAYS = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
+const MONTHS = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+
 export default function Calendar({ onBack }) {
   const [events, setEvents] = useStorage("sy_calendar", {});
   const [viewDate, setViewDate] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState(null);
   const [form, setForm] = useState({ title: "", type: "sinav" });
 
+  // MEB tarihlerini bir kez ekle
+  useEffect(() => {
+    if (localStorage.getItem("sy_meb_seeded")) return;
+    const snapshot = JSON.parse(localStorage.getItem("sy_calendar") || "{}");
+    MEB_EVENTS.forEach(({ date, title }) => {
+      if (!snapshot[date]) snapshot[date] = [];
+      snapshot[date].push({ id: Date.now() + Math.random(), title, type: "tatil" });
+    });
+    setEvents(snapshot);
+    localStorage.setItem("sy_meb_seeded", "1");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
-  const firstDay = new Date(year, month, 1).getDay();
+  // Pazartesi başlangıç: 0=Pzt … 6=Paz
+  const rawFirstDay = new Date(year, month, 1).getDay();
+  const firstDay = (rawFirstDay + 6) % 7;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const todayStr = new Date().toISOString().slice(0, 10);
 
@@ -41,9 +91,6 @@ export default function Calendar({ onBack }) {
 
   const selectedKey = selectedDay ? dayKey(selectedDay) : null;
   const selectedEvents = selectedKey ? (events[selectedKey] || []) : [];
-
-  const DAYS = ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"];
-  const MONTHS = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
 
   return (
     <div className="module-view active">
