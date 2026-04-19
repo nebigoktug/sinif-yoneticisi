@@ -1,4 +1,4 @@
-const CACHE_NAME = "sinif-yoneticisi-v1";
+const CACHE_NAME = "sinif-yoneticisi-__CACHE_VERSION__";
 const ASSETS = [
   "/",
   "/index.html",
@@ -7,15 +7,13 @@ const ASSETS = [
   "/icon-512.png"
 ];
 
-// Kurulum — statik dosyaları önbelleğe al
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
-  self.skipWaiting();
+  // skipWaiting yok — kullanıcı onaylayana kadar bekle
 });
 
-// Aktivasyon — eski cache'leri temizle
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -25,9 +23,13 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Fetch — önce cache, yoksa network
+self.addEventListener("message", (event) => {
+  if (event.data?.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener("fetch", (event) => {
-  // Sadece GET isteklerini yakala
   if (event.request.method !== "GET") return;
 
   event.respondWith(
@@ -36,7 +38,6 @@ self.addEventListener("fetch", (event) => {
 
       return fetch(event.request)
         .then((response) => {
-          // Geçerli response'u cache'e ekle
           if (response && response.status === 200 && response.type === "basic") {
             const clone = response.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
@@ -44,7 +45,6 @@ self.addEventListener("fetch", (event) => {
           return response;
         })
         .catch(() => {
-          // Offline — index.html döndür (SPA fallback)
           if (event.request.destination === "document") {
             return caches.match("/index.html");
           }

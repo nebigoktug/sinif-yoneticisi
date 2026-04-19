@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useStorage } from "./hooks/useStorage";
+import { useSWUpdate } from "./hooks/useSWUpdate";
 import { ALL_MODULES } from "./data/constants";
 import ClassList from "./components/ClassList";
 import Behavior from "./components/Behavior";
@@ -15,10 +16,13 @@ import Seat from "./components/Seat";
 import HomeWidgets from "./components/HomeWidgets";
 import Schedule from "./components/Schedule";
 import Onboarding from "./components/Onboarding";
+import UpdateToast from "./components/UpdateToast";
 import "./index.css";
 
 export default function App() {
   const [currentModule, setCurrentModule] = useState(null);
+  const { updateReady, applyUpdate } = useSWUpdate();
+  const [toastDismissed, setToastDismissed] = useState(false);
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
   const [onboardingMode, setOnboardingMode] = useState(null); // null | "quick" | "detailed"
@@ -105,18 +109,22 @@ export default function App() {
     .map((id) => ALL_MODULES.find((m) => m.id === id))
     .filter((m) => m && !(settings.hiddenModules || []).includes(m.id));
 
-  if (currentModule === "list")     return <><ClassList onBack={goHome} />{onboardingMode && <Onboarding mode={onboardingMode} onClose={closeOnboarding} />}</>;
-  if (currentModule === "behavior") return <Behavior onBack={goHome} />;
-  if (currentModule === "points")   return <Points onBack={goHome} />;
-  if (currentModule === "homework") return <Homework onBack={goHome} />;
-  if (currentModule === "picker")   return <Picker onBack={goHome} />;
-  if (currentModule === "msg")      return <ParentMessage onBack={goHome} />;
-  if (currentModule === "contacts") return <Contacts onBack={goHome} />;
-  if (currentModule === "calendar") return <Calendar onBack={goHome} />;
-  if (currentModule === "week")     return <WeeklySummary onBack={goHome} />;
-  if (currentModule === "settings") return <Settings onBack={goHome} onOpenGuide={(mode) => { goHome(); setTimeout(() => setOnboardingMode(mode), 100); }} />;
-  if (currentModule === "seat")     return <Seat onBack={goHome} />;
-  if (currentModule === "schedule") return <Schedule onBack={goHome} />;
+  const updateToast = updateReady && !toastDismissed && (
+    <UpdateToast onUpdate={applyUpdate} onDismiss={() => setToastDismissed(true)} />
+  );
+
+  if (currentModule === "list")     return <><ClassList onBack={goHome} />{onboardingMode && <Onboarding mode={onboardingMode} onClose={closeOnboarding} />}{updateToast}</>;
+  if (currentModule === "behavior") return <><Behavior onBack={goHome} />{updateToast}</>;
+  if (currentModule === "points")   return <><Points onBack={goHome} />{updateToast}</>;
+  if (currentModule === "homework") return <><Homework onBack={goHome} />{updateToast}</>;
+  if (currentModule === "picker")   return <><Picker onBack={goHome} />{updateToast}</>;
+  if (currentModule === "msg")      return <><ParentMessage onBack={goHome} />{updateToast}</>;
+  if (currentModule === "contacts") return <><Contacts onBack={goHome} />{updateToast}</>;
+  if (currentModule === "calendar") return <><Calendar onBack={goHome} />{updateToast}</>;
+  if (currentModule === "week")     return <><WeeklySummary onBack={goHome} />{updateToast}</>;
+  if (currentModule === "settings") return <><Settings onBack={goHome} onOpenGuide={(mode) => { goHome(); setTimeout(() => setOnboardingMode(mode), 100); }} />{updateToast}</>;
+  if (currentModule === "seat")     return <><Seat onBack={goHome} />{updateToast}</>;
+  if (currentModule === "schedule") return <><Schedule onBack={goHome} />{updateToast}</>;
 
   return (
     <div className="home-bg">
@@ -189,6 +197,14 @@ export default function App() {
           <><span style={{ color: "var(--text4)" }}>·</span><span>{settings.schoolName}</span></>
         )}
       </div>
+
+      {/* ─── SW Güncelleme Toast ─── */}
+      {updateReady && !toastDismissed && (
+        <UpdateToast
+          onUpdate={applyUpdate}
+          onDismiss={() => setToastDismissed(true)}
+        />
+      )}
 
     </div>
   );
