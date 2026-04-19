@@ -10,7 +10,8 @@ export default function HelpButton({ title, items }) {
 
   useEffect(() => {
     if (!visible) return;
-    requestAnimationFrame(() => {
+    // double-rAF: first frame mounts, second frame browser has painted initial styles
+    requestAnimationFrame(() => requestAnimationFrame(() => {
       animate(overlayRef.current, {
         opacity: [0, 1],
         duration: 260,
@@ -19,18 +20,18 @@ export default function HelpButton({ title, items }) {
       animate(cardRef.current, {
         translateY: ["64px", "0px"],
         opacity: [0, 1],
-        ease: spring({ stiffness: 80, damping: 10, mass: 1 }),
+        ease: spring({ stiffness: 200, damping: 26, mass: 1 }),
       });
       if (listRef.current?.children.length) {
         animate([...listRef.current.children], {
           opacity: [0, 1],
           translateY: ["10px", "0px"],
-          delay: stagger(65, { start: 260 }),
-          duration: 300,
+          delay: stagger(55, { start: 180 }),
+          duration: 260,
           ease: "outQuart",
         });
       }
-    });
+    }));
   }, [visible]);
 
   function close() {
@@ -99,6 +100,7 @@ export default function HelpButton({ title, items }) {
               width: "100%",
               opacity: 0,
               transform: "translateY(64px)",
+              willChange: "transform, opacity",
             }}
             onClick={(e) => e.stopPropagation()}
           >
