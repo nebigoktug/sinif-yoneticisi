@@ -16,9 +16,6 @@ export default function Schedule({ onBack }) {
   const [schedule, setSchedule] = useStorage("sy_schedule", {});
   const [times, setTimes] = useStorage("sy_schedule_times", DEFAULT_TIMES);
   const [activeDay, setActiveDay] = useState("Pazartesi");
-  const [editingTime, setEditingTime] = useState(null);
-  const [tempTime, setTempTime] = useState("");
-
   function setLesson(day, period, value) {
     const dayData = schedule[day] || {};
     setSchedule({ ...schedule, [day]: { ...dayData, [period]: value } });
@@ -28,7 +25,6 @@ export default function Schedule({ onBack }) {
     const newTimes = [...times];
     newTimes[i] = value;
     setTimes(newTimes);
-    setEditingTime(null);
   }
 
   function addPeriod() {
@@ -81,26 +77,13 @@ export default function Schedule({ onBack }) {
         {/* Ders listesi */}
         {times.map((time, i) => (
           <div key={i} className="card" style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-            <div style={{ minWidth: 48 }}>
-              {editingTime === i ? (
-                <input
-                  className="ti"
-                  style={{ width: 56, padding: "4px 6px", fontSize: 11 }}
-                  value={tempTime}
-                  onChange={(e) => setTempTime(e.target.value)}
-                  onBlur={() => updateTime(i, tempTime)}
-                  onKeyDown={(e) => e.key === "Enter" && updateTime(i, tempTime)}
-                  autoFocus
-                />
-              ) : (
-                <div
-                  style={{ fontSize: 11, color: "var(--accent-soft)", fontWeight: 700, cursor: "pointer" }}
-                  onClick={() => { setEditingTime(i); setTempTime(time); }}
-                >
-                  {time || "—:—"}
-                </div>
-              )}
-            </div>
+            <input
+              type="time"
+              className="ti"
+              style={{ width: 76, padding: "4px 6px", fontSize: 12, fontWeight: 700, color: "var(--accent-soft)", flexShrink: 0 }}
+              value={time}
+              onChange={(e) => updateTime(i, e.target.value)}
+            />
             <div style={{ fontSize: 11, color: "var(--text3)", minWidth: 20 }}>{i + 1}.</div>
             <input
               className="ti"
