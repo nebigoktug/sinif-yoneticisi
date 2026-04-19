@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { useStorage } from "../hooks/useStorage";
 import { THEMES, ALL_MODULES } from "../data/constants";
+import { genId } from "../utils/helpers";
 import HelpButton from "./HelpButton";
+
+const DEMO_STUDENTS = [
+  "Ahmet Yılmaz", "Ayşe Kaya", "Mehmet Demir", "Fatma Çelik", "Ali Öztürk",
+  "Zeynep Arslan", "Mustafa Şahin", "Elif Yıldız", "Emre Koç", "Selin Avcı",
+  "Burak Güneş", "Merve Çetin", "Oğuz Polat", "Deniz Erdoğan", "Ceren Doğan",
+];
 
 const HELP = [
   "Genel: sınıf adı, öğretmen adı ve okul adı.",
@@ -23,7 +30,12 @@ export default function Settings({ onBack, onOpenGuide }) {
     homeworkAutoBehavior: false,
   });
 
+  const [students, setStudents] = useStorage("sy_students", []);
   const [activeTab, setActiveTab] = useState("genel");
+
+  function loadDemo() {
+    setStudents(DEMO_STUDENTS.map((name) => ({ id: genId(), name })));
+  }
 
   function update(key, value) {
     const updated = { ...settings, [key]: value };
@@ -260,6 +272,11 @@ export default function Settings({ onBack, onOpenGuide }) {
         {/* Veri */}
         {activeTab === "veri" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {students.length === 0 && (
+              <button className="bp" style={{ background: "var(--green)", color: "#000" }} onClick={loadDemo}>
+                🎓 Demo Verisi Yükle
+              </button>
+            )}
             <button className="bp" style={{ background: "var(--accent)" }} onClick={exportData}>
               📤 Verileri Dışa Aktar (JSON)
             </button>
